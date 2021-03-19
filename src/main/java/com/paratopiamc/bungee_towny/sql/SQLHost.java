@@ -37,11 +37,11 @@ public class SQLHost {
         table_info.put("uuid", "VARCHAR(36) NOT NULL");
         table_info.put("name", "VARCHAR(16) NOT NULL");
         table_info.put("town", "VARCHAR(36)");
-        table_info.put("channel", "VARCHAR(36) NOT NULL");
+        table_info.put("channel", "VARCHAR(36) NOT NULL DEFAULT 'general'");
         table_info.put("nation", "VARCHAR(36)");
         table_info.put("title", "VARCHAR(10)");
         table_info.put("res", "JSON");
-        table_info.put("muted", "BOOLEAN");
+        table_info.put("muted", "BOOLEAN DEFAULT FALSE");
         messenger.createTable("players", table_info);
 
         //town | nation | color | allies | claims

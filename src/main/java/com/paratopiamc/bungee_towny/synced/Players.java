@@ -75,6 +75,21 @@ public abstract class Players {
         return "general";
     }
 
+    public static boolean isMuted(String uuid) {
+        try {
+            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT muted FROM players WHERE uuid  = '" + uuid + "';");
+
+            if (results.next()) {
+                Boolean value = results.getBoolean("muted");
+                return value;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public static String getTitle(String uuid) {
         try {
             ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT title FROM players WHERE uuid  = '" + uuid + "';");
