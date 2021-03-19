@@ -41,6 +41,7 @@ public class SQLHost {
         table_info.put("nation", "VARCHAR(36)");
         table_info.put("title", "VARCHAR(10)");
         table_info.put("res", "JSON");
+        table_info.put("muted", "BOOLEAN");
         messenger.createTable("players", table_info);
 
         //town | nation | color | allies | claims

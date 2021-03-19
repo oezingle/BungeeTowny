@@ -37,7 +37,7 @@ public class PlayerJoinListener implements Listener {
 
         if (!alreadyExists) {
             BungeeTowny.sqlhost.getMessenger().executeSQL(
-                    "INSERT INTO players (uuid, name, town, channel, nation, title, res) VALUES (\"" + uuid + "\",\"" + name + "\",null,\"" + "general" + "\", null, null, null);"
+                    "INSERT INTO players (uuid, name, town, channel, nation, title, res, muted) VALUES (\"" + uuid + "\",\"" + name + "\",null,\"" + "general" + "\", null, null, null);"
             );
 
         }
