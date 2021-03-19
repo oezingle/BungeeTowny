@@ -1,0 +1,5 @@
+
+#are chat features enabled?
+#configuration is in Channels.yml
+chat: false
+lang: EN

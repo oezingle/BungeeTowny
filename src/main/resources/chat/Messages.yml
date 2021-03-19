@@ -1,0 +1,8 @@
+en:
+  no_town: "&cYou're not in a town"
+  no_nation: "&cYou're not in a nation"
+  channel_switch: "&fChannel set to &a${CHANNEL}"
+  not_a_channel: "&eThat channel does not exist!"
+  null_channel: "&eYour message could not be sent"
+  bad_config: "&cYour admin did not set up the chat correctly. Please report this error"
+  current_channel: "&fYou're speaking in the &a${CHANNEL}&f channel"

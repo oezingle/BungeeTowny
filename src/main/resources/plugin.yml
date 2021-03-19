@@ -1,0 +1,19 @@
+name: BungeeTowny
+api-version: 1.15
+version: ${project.version}
+main: com.paratopiamc.bungee_towny.BungeeTowny
+authors: [ Oezingle ]
+description: Towny across bungeecord instances!
+
+softdepend: [PlaceholderAPI, Towny]
+
+commands:
+  chat:
+    permission: bungeetowny.chat
+    usage: Syntax error. Use /<command> <channel>
+    description: the command to change channels. All other channel commands are ailases
+
+permissions:
+  bungeetowny.chat:
+    default: true
+    description: allows use of /chat
