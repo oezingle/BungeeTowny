@@ -29,18 +29,18 @@ public class SQLHost {
         table_info.put("server_uuid", "VARCHAR(36) NOT NULL");
         //                             this length is arbitrary, idk what to make it
         table_info.put("server_name", "VARCHAR(64) NOT NULL");
-        table_info.put("using_towny", "BOOLEAN");
+        table_info.put("using_towny", "BOOLEAN DEFAULT FALSE");
         messenger.createTable("servers", table_info);
 
         //player | town | nation | title | res info?
         table_info = new HashMap<>();
         table_info.put("uuid", "VARCHAR(36) NOT NULL");
         table_info.put("name", "VARCHAR(16) NOT NULL");
-        table_info.put("town", "VARCHAR(36)");
+        table_info.put("town", "VARCHAR(36) DEFAULT null");
         table_info.put("channel", "VARCHAR(36) NOT NULL DEFAULT 'general'");
-        table_info.put("nation", "VARCHAR(36)");
-        table_info.put("title", "VARCHAR(10)");
-        table_info.put("res", "JSON");
+        table_info.put("nation", "VARCHAR(36) DEFAULT null");
+        table_info.put("title", "VARCHAR(10) DEFAULT null");
+        table_info.put("res", "JSON DEFAULT null");
         table_info.put("muted", "BOOLEAN DEFAULT FALSE");
         messenger.createTable("players", table_info);
 
