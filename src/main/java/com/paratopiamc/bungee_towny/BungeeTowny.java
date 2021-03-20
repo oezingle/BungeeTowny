@@ -113,6 +113,9 @@ public final class BungeeTowny extends JavaPlugin {
                 Listeners.usingPAPI(true);
             }
 
+            //readme ===================================================================================
+            saveResource("chat/README.txt", true);
+
             //channels ==================================================================================
             File channelFile = new File(getDataFolder(), "chat/Channels.yml");
             if (!channelFile.exists()) {
@@ -150,6 +153,17 @@ public final class BungeeTowny extends JavaPlugin {
             Translation.setFromConfig(messageConfig,"chat.");
 
             sqlhost.set_config("chatMessages", messageFile);
+
+            //BungeeTowny ================================================================================
+            File newChatSettingsFile = new File(getDataFolder(), "chat/BungeeTowny.yml");
+            if (!newChatSettingsFile.exists()) {
+                saveResource("chat/BungeeTowny.yml", false);
+            }
+
+            newChatSettingsFile = new File(getDataFolder(), "chat/BungeeTowny.yml");
+            FileConfiguration newChatConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
+
+            sqlhost.set_config("newChatSettings", newChatSettingsFile);
 
             //get the channels as commands
             ConfigurationSection channels = channelConfig.getConfigurationSection("Channels");
