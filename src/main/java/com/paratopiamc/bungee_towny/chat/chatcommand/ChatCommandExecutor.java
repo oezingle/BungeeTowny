@@ -1,7 +1,7 @@
 package com.paratopiamc.bungee_towny.chat.chatcommand;
 
 import com.paratopiamc.bungee_towny.Translation;
-import com.paratopiamc.bungee_towny.chat.Channel.Channel;
+import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.chat.ChatSendEvent;
 import com.paratopiamc.bungee_towny.synced.Players;
 import org.bukkit.Bukkit;

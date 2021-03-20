@@ -1,8 +1,5 @@
 package com.paratopiamc.bungee_towny.chat;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -10,7 +7,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.Translation;
 import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessage;
-import com.paratopiamc.bungee_towny.chat.Channel.Channel;
+import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.synced.Nations;
 import com.paratopiamc.bungee_towny.synced.Players;
@@ -18,16 +15,12 @@ import com.paratopiamc.bungee_towny.synced.Towns;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 public class ChatSendEvent extends Event {
 
@@ -38,9 +31,15 @@ public class ChatSendEvent extends Event {
 
         String format = channel.getFormat();
 
-        if (format != null) {
-            String uuid = player.getUniqueId().toString();
+        String uuid = player.getUniqueId().toString();
 
+        //TODO sync with essentials
+        if (Players.isMuted(uuid)) {
+            player.sendMessage(replaceColors(Translation.of("chat.muted")));
+            return;
+        }
+
+        if (format != null) {
             //taken from townychat
             if (playerMessage.contains("&L") || playerMessage.contains("&l") ||
                     playerMessage.contains("&O") || playerMessage.contains("&o") ||
@@ -164,8 +163,6 @@ public class ChatSendEvent extends Event {
             if (Listeners.isUsingBungee()) {
 
                 //use the mysql db to figure out recipients
-                Collection<String> recipients = new ArrayList<>();
-
                 switch (channel.getType()) {
                     case TOWN:
                         if (channel.isJSON()) {

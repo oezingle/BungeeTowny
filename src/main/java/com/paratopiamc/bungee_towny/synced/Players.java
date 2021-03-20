@@ -90,6 +90,14 @@ public abstract class Players {
         return false;
     }
 
+    public static void setMuted(String uuid) {
+        BungeeTowny.sqlhost.getMessenger().executeSQL(
+                " UPDATE players" +
+                        "    SET muted = " + true + "" +
+                        "WHERE uuid ='" + uuid + "';"
+        );
+    }
+
     public static String getTitle(String uuid) {
         try {
             ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT title FROM players WHERE uuid  = '" + uuid + "';");

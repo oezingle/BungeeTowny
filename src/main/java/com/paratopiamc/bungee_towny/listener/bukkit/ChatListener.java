@@ -1,6 +1,6 @@
 package com.paratopiamc.bungee_towny.listener.bukkit;
 
-import com.paratopiamc.bungee_towny.chat.Channel.Channel;
+import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.chat.Channels;
 import com.paratopiamc.bungee_towny.chat.ChatSendEvent;
 import com.paratopiamc.bungee_towny.synced.Players;

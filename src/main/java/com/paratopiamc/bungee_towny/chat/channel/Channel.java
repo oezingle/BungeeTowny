@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.chat.Channel;
+package com.paratopiamc.bungee_towny.chat.channel;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

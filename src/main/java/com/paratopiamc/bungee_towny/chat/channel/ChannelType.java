@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.chat.Channel;
+package com.paratopiamc.bungee_towny.chat.channel;
 
 public enum ChannelType {
     GLOBAL,

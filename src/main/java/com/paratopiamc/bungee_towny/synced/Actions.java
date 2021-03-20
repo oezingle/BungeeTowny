@@ -1,4 +1,8 @@
 package com.paratopiamc.bungee_towny.synced;
 
-public class Actions {
+public abstract class Actions {
+
+    public static void add(String json) {
+        //TODO
+    }
 }

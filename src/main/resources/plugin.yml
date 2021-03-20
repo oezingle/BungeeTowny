@@ -12,8 +12,14 @@ commands:
     permission: bungeetowny.chat
     usage: Syntax error. Use /<command> <channel>
     description: the command to change channels. All other channel commands are ailases
+  mute:
+    permission: bungeetowny.mute
+    usage: Syntax error. Use /<command> <channel>
+      description: a command to mute players across TownyChat
 
 permissions:
   bungeetowny.chat:
     default: true
     description: allows use of /chat
+  bungeetowny.mute:
+    description: allows staff to /mute

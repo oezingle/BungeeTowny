@@ -1,6 +1,6 @@
 package com.paratopiamc.bungee_towny.chat;
 
-import com.paratopiamc.bungee_towny.chat.Channel.Channel;
+import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.chat.chatcommand.ChatCommandExecutor;
 import com.paratopiamc.bungee_towny.chat.chatcommand.ChatCommandTabCompletor;
 import org.bukkit.configuration.ConfigurationSection;
