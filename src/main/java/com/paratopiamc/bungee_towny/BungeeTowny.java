@@ -100,7 +100,6 @@ public final class BungeeTowny extends JavaPlugin {
             getLogger().info("Could not find Towny. Your server may be missing some functionality");
         } else {
             Listeners.usingTowny(true);
-
         }
 
         //figure out if chat features are enabled, and do the thing!

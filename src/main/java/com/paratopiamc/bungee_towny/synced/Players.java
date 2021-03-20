@@ -90,10 +90,10 @@ public abstract class Players {
         return false;
     }
 
-    public static void setMuted(String uuid) {
+    public static void setMuted(String uuid, boolean mute) {
         BungeeTowny.sqlhost.getMessenger().executeSQL(
                 " UPDATE players" +
-                        "    SET muted = " + true + "" +
+                        "    SET muted = " + mute + "" +
                         "WHERE uuid ='" + uuid + "';"
         );
     }

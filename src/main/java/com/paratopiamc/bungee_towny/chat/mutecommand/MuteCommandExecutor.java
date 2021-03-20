@@ -1,6 +1,7 @@
 package com.paratopiamc.bungee_towny.chat.mutecommand;
 
 import com.paratopiamc.bungee_towny.Translation;
+import com.paratopiamc.bungee_towny.synced.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,6 +20,15 @@ public class MuteCommandExecutor implements CommandExecutor {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(args[0])) {
                 //mute the player
+                String uuid = player.getUniqueId().toString();
+
+                if (Players.isMuted(uuid)) {
+                    sender.sendMessage(replaceColors(Translation.of("chat.admin.already_muted")));
+                    return true;
+                } else {
+                    sender.sendMessage(replaceColors(Translation.of("chat.admin.success")));
+                    Players.setMuted(uuid, true);
+                }
 
                 //notify them
                 //TODO check for chat/BungeeTowny.yml > mute.notify
@@ -30,6 +40,7 @@ public class MuteCommandExecutor implements CommandExecutor {
         }
 
         sender.sendMessage(replaceColors(Translation.of("chat.admin.player_not_found")));
+        return true;
     }
 
     private String replaceColors(String message) {

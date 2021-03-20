@@ -10,3 +10,6 @@ en:
   bad_args: "&cWrong amount of arguments!"
   admin:
     player_not_found: "&cThat player could not be found!"
+    already_muted: "&eThat player is already muted"
+    mute_success: "&aMuted ${NAME}"
+    unmute_success: "&aUnmuted ${NAME}"

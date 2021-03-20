@@ -3,6 +3,7 @@ package com.paratopiamc.bungee_towny.chat;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.chat.chatcommand.ChatCommandExecutor;
 import com.paratopiamc.bungee_towny.chat.chatcommand.ChatCommandTabCompletor;
+import com.paratopiamc.bungee_towny.chat.mutecommand.MuteCommandExecutor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,8 +34,9 @@ public abstract class Channels {
         }
 
         plugin.getCommand("chat").setExecutor(new ChatCommandExecutor(channels));
-
         plugin.getCommand("chat").setTabCompleter(new ChatCommandTabCompletor(channels));
+
+        plugin.getCommand("mute").setExecutor(new MuteCommandExecutor());
 
     }
 
