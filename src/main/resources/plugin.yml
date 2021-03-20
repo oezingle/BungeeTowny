@@ -13,11 +13,11 @@ commands:
     description: the command to change channels. All other channel commands are ailases
   mute:
     permission: bungeetowny.mute
-    usage: Syntax error. Use /<command> <channel>
+    usage: Syntax error. Use /<command> <player>
     description: a command to mute players across BungeeTowny's chat
   unmute:
     permission: bungeetowny.mute
-    usage: Syntax error. Use /<command> <channel>
+    usage: Syntax error. Use /<command> <player>
     description: a command to unmute players across BungeeTowny's chat
 
 permissions:
