@@ -41,7 +41,7 @@ public class BungeeMessageListener implements PluginMessageListener {
                 String serverName = in.readUTF();
 
                 if (serverName != null) {
-                    BungeeTowny.setServerName(in.readUTF());
+                    BungeeTowny.setServerName(serverName);
                 }
                 Listeners.usingBungee(true);
 

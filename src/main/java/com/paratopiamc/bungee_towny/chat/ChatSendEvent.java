@@ -192,13 +192,23 @@ public class ChatSendEvent extends Event {
                         //send a plugin message to the other servers, because we have to check permissions with these
                         Plugin plugin = Listeners.getPlugin();
 
+                        String permission = channel.getPermission();
+
                         BungeeMessage messages = new BungeeMessage(plugin);
                         messages.sendPluginMessage(
                                 "{" +
                                 "   \"command\":\"permission_chat\"," +
-                                "   \"permission\":\"" + channel.getPermission() + "\"," +
+                                "   \"permission\":\"" + permission + "\"," +
                                 "   \"message\":\"" + chatMessage + "\"" +
                                 "}");
+
+                        //do it locally
+                        for (Player candidate : Bukkit.getOnlinePlayers()) {
+                            if (candidate.hasPermission(permission)) {
+                                //TODO spigot chatAPI
+                                candidate.sendMessage(chatMessage);
+                            }
+                        }
 
                         break;
                 }
