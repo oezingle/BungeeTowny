@@ -1,5 +1,14 @@
 #TODO this
 
+#If enabled, bungeetowny will override the /msg command and let players message anyone within bungeetowny
+msg:
+  enabled: true
+  #players can /msg <name> to toggle into that 'channel'
+  toggle: true
+  #0 is no timeout
+  #any other value is the timeout in minutes
+  timeout: 0
+
 mute:
   enabled: true
   notify: true
