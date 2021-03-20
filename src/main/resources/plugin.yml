@@ -4,7 +4,6 @@ version: ${project.version}
 main: com.paratopiamc.bungee_towny.BungeeTowny
 authors: [ Oezingle ]
 description: Towny across bungeecord instances!
-
 softdepend: [PlaceholderAPI, Towny]
 
 commands:
@@ -16,10 +15,14 @@ commands:
     permission: bungeetowny.mute
     usage: Syntax error. Use /<command> <channel>
     description: a command to mute players across BungeeTowny's chat
+  unmute:
+    permission: bungeetowny.mute
+    usage: Syntax error. Use /<command> <channel>
+    description: a command to unmute players across BungeeTowny's chat
 
 permissions:
   bungeetowny.chat:
     default: true
     description: allows use of /chat
   bungeetowny.mute:
-    description: allows staff to /mute
+    description: allows staff to /mute and /unmute

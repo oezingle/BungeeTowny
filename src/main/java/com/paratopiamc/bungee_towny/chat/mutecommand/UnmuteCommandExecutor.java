@@ -23,12 +23,12 @@ public class UnmuteCommandExecutor implements CommandExecutor {
                 String uuid = player.getUniqueId().toString();
                 String name = player.getName();
 
-                if (Players.isMuted(uuid)) {
+                if (! Players.isMuted(uuid)) {
                     sender.sendMessage(replaceColors(Translation.of("chat.admin.already_unmuted")));
                     return true;
                 } else {
                     sender.sendMessage(replaceColors(Translation.of("chat.admin.unmute_success").replace("${NAME}",name)));
-                    Players.setMuted(uuid, true);
+                    Players.setMuted(uuid, false);
                 }
 
                 //notify them
