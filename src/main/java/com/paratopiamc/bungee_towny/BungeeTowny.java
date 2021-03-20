@@ -67,7 +67,7 @@ public final class BungeeTowny extends JavaPlugin {
 
             save_uuid_config(server_uuid_config);
 
-            setServerName("!UNKNOWN!");
+            //setServerName("!UNKNOWN!");
         } else {
             serverUUID = server_uuid_config.getString("this_server.uuid");
             serverName = server_uuid_config.getString("this_server.name");

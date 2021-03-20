@@ -191,11 +191,14 @@ public class ChatSendEvent extends Event {
                     default:
                         //send a plugin message to the other servers, because we have to check permissions with these
                         Plugin plugin = Listeners.getPlugin();
-                        BungeeMessage messages = new BungeeMessage(plugin);
 
-                        for (String recipient : recipients) {
-                            messages.sendPluginMessage("{}");
-                        }
+                        BungeeMessage messages = new BungeeMessage(plugin);
+                        messages.sendPluginMessage(
+                                "{" +
+                                "   \"command\":\"permission_chat\"," +
+                                "   \"permission\":\"" + channel.getPermission() + "\"," +
+                                "   \"message\":\"" + chatMessage + "\"" +
+                                "}");
 
                         break;
                 }

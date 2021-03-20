@@ -4,9 +4,9 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.listener.Listeners;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -14,6 +14,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.logging.Level;
 
 
 public class BungeeMessageListener implements PluginMessageListener {
@@ -25,23 +26,26 @@ public class BungeeMessageListener implements PluginMessageListener {
     }
 
     @Override
-    public void onPluginMessageReceived(String channel, Player notUsedPlayer, byte[] message) {
+    public void onPluginMessageReceived(String channel, Player notUsedPlayer, byte[] byteMessage) {
         if (!channel.equals("BungeeCord")) {
             return;
         }
 
-        ByteArrayDataInput in = ByteStreams.newDataInput(message);
+        ByteArrayDataInput in = ByteStreams.newDataInput(byteMessage);
         String subchannel = in.readUTF();
 
         switch (subchannel) {
             case "GetServer":
                 BungeeTowny.waitForBungeePlayer.cancel();
-                BungeeTowny.setServerName(in.readUTF());
 
+                String serverName = in.readUTF();
+
+                if (serverName != null) {
+                    BungeeTowny.setServerName(in.readUTF());
+                }
                 Listeners.usingBungee(true);
 
                 break;
-
             case "PlayerList":
 
                 String server = in.readUTF(); // The name of the server you got the player list of
@@ -72,18 +76,33 @@ public class BungeeMessageListener implements PluginMessageListener {
                 }
 
                 //outdata should be a json value
+
                 JsonObject jsonObject = new Gson().fromJson(outdata, JsonObject.class);
 
-                String command = jsonObject.get("command").toString();
-
-                System.out.println("command: " + command);
+                String command = jsonObject.get("command").getAsString();
 
                 switch (command) {
-                    case "check-queue":
+                    case "permission_chat": {
+                        String permission = jsonObject.get("permission").getAsString();
+                        String message = jsonObject.get("message").getAsString();
+
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            if (player.hasPermission(permission)) {
+                                //TODO spigot chatAPI
+                                player.sendMessage(message);
+                            }
+                        }
+
+                        break;
+                    }
+                    case "check_queue": {
                         //TODO check mysql queue for actions
                         break;
-                    case "permission-chat":
-                        //TODO send the message to the players who have the permission
+                    }
+
+                    default:
+                        Bukkit.getLogger().log(Level.WARNING, "[BungeeTowny] Unknown BungeeTowny command \"" + command + "\" received");
+                        break;
                 }
 
         }

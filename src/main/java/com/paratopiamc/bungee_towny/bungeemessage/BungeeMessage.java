@@ -43,6 +43,7 @@ public class BungeeMessage {
     }
 
     public void sendPluginMessage(String message) {
+        System.out.println(message);
 
         ByteArrayOutputStream msgbytes = new ByteArrayOutputStream();
         DataOutputStream msgout = new DataOutputStream(msgbytes);
@@ -52,9 +53,10 @@ public class BungeeMessage {
             exception.printStackTrace();
         }
 
-        writeStrings(new String[]{"Forward", "ALL", "BungeeTownyChat"});
+        writeStrings(new String[]{"Forward", "ALL", "BungeeTowny"});
         bytesOut.writeShort(msgbytes.toByteArray().length);
         bytesOut.write(msgbytes.toByteArray());
+
         send();
     }
 
