@@ -41,15 +41,18 @@ public class ChatCommandExecutor implements CommandExecutor {
         } else if (args.length == 1) {
             // /chat <channel>
             for (Channel channel : channels.values()) {
-
-                if (args[0].equalsIgnoreCase(channel.getName())) {
+                if (args[0].equalsIgnoreCase(channel.getName()) && player.hasPermission(channel.getPermission())) {
                     if (channel.getName().equals("town") && Players.getTown(uuid).equalsIgnoreCase("townless")) {
                         sender.sendMessage(no_town);
+
+                        //TODO not this
                         Bukkit.dispatchCommand(player, "chat general");
                         return true;
                     }
                     if (channel.getName().equals("nation") && Players.getNation(uuid).equalsIgnoreCase("nationless")) {
                         sender.sendMessage(no_nation);
+
+                        //TODO not this
                         Bukkit.dispatchCommand(player, "chat general");
                         return true;
                     }
@@ -74,14 +77,18 @@ public class ChatCommandExecutor implements CommandExecutor {
             }
 
             for (Channel channel : channels.values()) {
-                if (args[0].equalsIgnoreCase(channel.getName())) {
+                if (args[0].equalsIgnoreCase(channel.getName()) && player.hasPermission(channel.getPermission())) {
                     if (channel.getName().equals("town") && Players.getTown(uuid).equalsIgnoreCase("townless")) {
                         sender.sendMessage(no_town);
+
+                        //TODO not this
                         Bukkit.dispatchCommand(player, "chat general");
                         return true;
                     }
                     if (channel.getName().equals("nation") && Players.getNation(uuid).equalsIgnoreCase("nationless")) {
                         sender.sendMessage(no_nation);
+
+                        //TODO not this
                         Bukkit.dispatchCommand(player, "chat general");
                         return true;
                     }

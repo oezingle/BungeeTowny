@@ -194,9 +194,7 @@ public class ChatSendEvent extends Event {
                         BungeeMessage messages = new BungeeMessage(plugin);
 
                         for (String recipient : recipients) {
-                            messages.writeStrings(new String[]{"", recipient, chatMessage});
-
-                            messages.send();
+                            messages.sendPluginMessage("{}");
                         }
 
                         break;

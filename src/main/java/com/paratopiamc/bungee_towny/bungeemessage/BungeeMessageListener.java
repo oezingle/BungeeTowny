@@ -82,6 +82,8 @@ public class BungeeMessageListener implements PluginMessageListener {
                     case "check-queue":
                         //TODO check mysql queue for actions
                         break;
+                    case "permission-chat":
+                        //TODO send the message to the players who have the permission
                 }
 
         }
