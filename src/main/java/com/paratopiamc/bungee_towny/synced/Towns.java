@@ -1,6 +1,7 @@
 package com.paratopiamc.bungee_towny.synced;
 
-import com.paratopiamc.bungee_towny.BungeeTowny;
+import com.paratopiamc.bungee_towny.sql.SQLHost;
+import com.paratopiamc.bungee_towny.sql.SQLMessage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +12,7 @@ public abstract class Towns {
 
     public static List<String> getResidents(String town) {
         try {
-            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT uuid FROM players WHERE town  = '" + town + "';");
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT uuid FROM players WHERE town  = '" + town + "';");
 
             List<String> list = new ArrayList<>();
 
@@ -28,7 +29,7 @@ public abstract class Towns {
 
     public static List<String> getAllNames() {
         try {
-            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT name FROM players;");
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players;");
 
             List<String> list = new ArrayList<>();
 
@@ -45,7 +46,7 @@ public abstract class Towns {
 
     public static List<String> getAllUUIDs() {
         try {
-            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT uuid FROM players;");
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT uuid FROM players;");
 
             List<String> list = new ArrayList<>();
 
@@ -62,7 +63,7 @@ public abstract class Towns {
 
     public static List<String> getResidentNames(String town) {
         try {
-            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT name FROM players WHERE town  = '" + town + "';");
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players WHERE town  = '" + town + "';");
 
             List<String> list = new ArrayList<>();
 

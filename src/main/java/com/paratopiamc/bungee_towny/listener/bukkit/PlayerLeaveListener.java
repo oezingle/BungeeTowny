@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
+import com.paratopiamc.bungee_towny.sql.SQLMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +22,7 @@ public class PlayerLeaveListener implements Listener {
             Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
             String title = resident.getTitle();
 
-            SQLHost.getMessenger().executeSQL(
+            new SQLMessage(SQLHost.getCredentials()).executeSQL(
                     " UPDATE players" +
                             "    SET title = '" + title + "'" +
                             "WHERE uuid ='" + uuid + "';"
