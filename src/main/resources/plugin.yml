@@ -19,6 +19,11 @@ commands:
     permission: bungeetowny.mute
     usage: Syntax error. Use /<command> <player>
     description: a command to unmute players across BungeeTowny's chat
+  town:
+    permission: bungeetowny.town
+    usage: Syntax error. Use /<command>
+    description: a stand-in for towny's /t and /town command
+    aliases: [t]
 
 permissions:
   bungeetowny.chat:
@@ -26,3 +31,11 @@ permissions:
     description: allows use of /chat
   bungeetowny.mute:
     description: allows staff to /mute and /unmute
+  bungeetowny.town:
+    default: true
+    description: allows using /town [arg] if towny isn't present on the server
+    children:
+      - bungeetowny.town.spawn
+  bungeetowny.town.spawn:
+    default: true
+    description: allows using /town spawn from this server.

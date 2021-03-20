@@ -34,7 +34,6 @@ public abstract class Translation {
         return translations.get(key);
     }
 
-
     public static void setValue(String key, String value) {
         translations.put(key, value);
     }

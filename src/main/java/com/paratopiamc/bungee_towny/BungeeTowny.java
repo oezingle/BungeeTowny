@@ -170,6 +170,17 @@ public final class BungeeTowny extends JavaPlugin {
             Channels.init(this, channels, chatConfig);
         }
 
+        //Messages ===================================================================
+        File messageFile = new File(getDataFolder(), "Messages.yml");
+        if (!messageFile.exists()) {
+            saveResource("Messages.yml", false);
+        }
+
+        messageFile = new File(getDataFolder(), "Messages.yml");
+        FileConfiguration messageConfig = YamlConfiguration.loadConfiguration(messageFile);
+
+        Translation.setFromConfig(messageConfig, "towny");
+
         //TODO sync configs
 
         Plugin thisPlugin = this;
