@@ -44,6 +44,8 @@ public abstract class Translation {
             String value = config.getString(key);
 
             setValue(prefix + key, value);
+
+            System.out.println(key + " | " + value);
         }
     }
 

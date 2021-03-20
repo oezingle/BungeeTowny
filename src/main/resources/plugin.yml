@@ -15,7 +15,7 @@ commands:
   mute:
     permission: bungeetowny.mute
     usage: Syntax error. Use /<command> <channel>
-      description: a command to mute players across TownyChat
+    description: a command to mute players across BungeeTowny's chat
 
 permissions:
   bungeetowny.chat:
