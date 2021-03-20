@@ -35,7 +35,7 @@ public class ChatSendEvent extends Event {
 
         //TODO sync with essentials
         if (Players.isMuted(uuid)) {
-            player.sendMessage(replaceColors(Translation.of("chat.muted")));
+            player.sendMessage(Translation.of("chat.muted"));
             return;
         }
 
@@ -211,12 +211,12 @@ public class ChatSendEvent extends Event {
                 }
 
             } else {
-                String bad_config = replaceColors(Translation.of("chat.bad_config"));
+                String bad_config = Translation.of("chat.bad_config");
                 player.sendMessage(bad_config);
                 Bukkit.getPluginManager().getPlugin("BungeeTowny").getLogger().info(bad_config);
             }
         } else {
-            player.sendMessage(replaceColors(Translation.of("chat.null_channel")));
+            player.sendMessage(Translation.of("chat.null_channel"));
         }
     }
 

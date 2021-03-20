@@ -43,11 +43,7 @@ public class ChatListener implements Listener {
         event.setCancelled(true);
     }
 
-    /*private String replaceColors(String message) {
-        return message.replace("&", "\u00a7");
-    }
-
-    private String getNamePostfix(Resident resident) {
+    /*private String getNamePostfix(Resident resident) {
 
         if (resident == null)
             return "";

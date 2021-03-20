@@ -17,15 +17,23 @@ public abstract class Translation {
         lang = newLang.toLowerCase();
     }
 
+
+    //translation with replaced colors and a not-null value
     public static String of(String key) {
         String val = translations.get(key);
 
         if (val != null) {
-            return val;
+            return val.replace("&", "\u00a7");
         } else {
-            return "BUNGEETOWNY_UNSETVAL";
+            return "&cBUNGEETOWNY_UNSETVAL".replace("&", "\u00a7");
         }
     }
+
+    //raw translation
+    public static String get(String key) {
+        return translations.get(key);
+    }
+
 
     public static void setValue(String key, String value) {
         translations.put(key, value);

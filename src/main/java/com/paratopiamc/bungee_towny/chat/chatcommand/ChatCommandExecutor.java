@@ -20,15 +20,15 @@ public class ChatCommandExecutor implements CommandExecutor {
     private static String no_nation;
 
     public ChatCommandExecutor(HashMap<String, Channel> channels) {
-        no_town = replaceColors(Translation.of("chat.no_town"));
-        no_nation = replaceColors(Translation.of("chat.no_nation"));
+        no_town = Translation.of("chat.no_town");
+        no_nation = Translation.of("chat.no_nation");
 
         this.channels = channels;
     }
 
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(replaceColors("&cThis sender isn't allowed"));
+            sender.sendMessage(replaceColors("&cThis sender isn't allowed to send this command"));
             return true;
         }
 
@@ -37,7 +37,7 @@ public class ChatCommandExecutor implements CommandExecutor {
 
         if (args.length < 1) {
             // /chat
-            sender.sendMessage(replaceColors(Translation.of("chat.current_channel").replace("${CHANNEL}", Players.getChannel(uuid))));
+            sender.sendMessage(Translation.of("chat.current_channel").replace("${CHANNEL}", Players.getChannel(uuid)));
             return true;
         } else {
             for (Channel channel : channels.values()) {
@@ -56,7 +56,7 @@ public class ChatCommandExecutor implements CommandExecutor {
                     }
 
                     if (args.length == 1) {
-                        sender.sendMessage(replaceColors(Translation.of("chat.channel_switch").replace("${CHANNEL}", channel.getName())));
+                        sender.sendMessage(Translation.of("chat.channel_switch").replace("${CHANNEL}", channel.getName()));
 
                         //switch the channel
                         Players.setChannel(channel.getName(), uuid);
@@ -73,9 +73,11 @@ public class ChatCommandExecutor implements CommandExecutor {
                     return true;
                 }
             }
-        }
 
-        return false;
+            //notify the user that the command doesn't exist
+            sender.sendMessage(Translation.of("chat.not_a_channel"));
+            return true;
+        }
     }
 
     private String replaceColors(String message) {

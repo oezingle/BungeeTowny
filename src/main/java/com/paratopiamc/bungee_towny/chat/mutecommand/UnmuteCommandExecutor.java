@@ -12,7 +12,7 @@ public class UnmuteCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
 
         if (args.length < 1 || args.length > 1) {
-            sender.sendMessage(replaceColors(Translation.of("chat.bad_args")));
+            sender.sendMessage(Translation.of("chat.bad_args"));
             return false;
         }
 
@@ -24,28 +24,23 @@ public class UnmuteCommandExecutor implements CommandExecutor {
                 String name = player.getName();
 
                 if (! Players.isMuted(uuid)) {
-                    sender.sendMessage(replaceColors(Translation.of("chat.admin.already_unmuted")));
+                    sender.sendMessage(Translation.of("chat.admin.already_unmuted"));
                     return true;
                 } else {
-                    sender.sendMessage(replaceColors(Translation.of("chat.admin.unmute_success").replace("${NAME}",name)));
+                    sender.sendMessage(Translation.of("chat.admin.unmute_success").replace("${NAME}",name));
                     Players.setMuted(uuid, false);
                 }
 
                 //notify them
                 //TODO check for chat/BungeeTowny.yml > mute.notify
-                player.sendMessage(replaceColors(Translation.of("chat.unmuted")));
+                player.sendMessage(Translation.of("chat.unmuted"));
 
                 //return true
                 return true;
             }
         }
 
-        sender.sendMessage(replaceColors(Translation.of("chat.admin.player_not_found")));
+        sender.sendMessage(Translation.of("chat.admin.player_not_found"));
         return true;
     }
-
-    private String replaceColors(String message) {
-        return message.replace("&", "\u00a7");
-    }
-
 }
