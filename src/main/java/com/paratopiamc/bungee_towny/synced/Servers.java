@@ -1,10 +1,12 @@
 package com.paratopiamc.bungee_towny.synced;
 
+import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import com.paratopiamc.bungee_towny.sql.SQLMessage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 public abstract class Servers {
 
@@ -20,7 +22,8 @@ public abstract class Servers {
         } catch (SQLException e) {
             e.printStackTrace();
 
-            System.out.println("[BungeeTowny] An unexpected SQL error has occurred");
+
+            BungeeTowny.getThisPlugin().getLogger().log(Level.WARNING, "An unexpected SQL error has occurred");
         }
 
         //fallback value
@@ -39,7 +42,7 @@ public abstract class Servers {
         } catch (SQLException e) {
             e.printStackTrace();
 
-            System.out.println("[BungeeTowny] An unexpected SQL error has occurred");
+            BungeeTowny.getThisPlugin().getLogger().log(Level.WARNING, "An unexpected SQL error has occurred");
         }
 
         //fallback value

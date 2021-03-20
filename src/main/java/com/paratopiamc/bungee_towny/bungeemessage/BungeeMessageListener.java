@@ -54,7 +54,7 @@ public class BungeeMessageListener implements PluginMessageListener {
                     String[] playerList = in.readUTF().split(", ");
 
                     for (String player : playerList) {
-                        System.out.println(player);
+                        BungeeTowny.getThisPlugin().getLogger().info(player);
                     }
                 }
 
@@ -101,7 +101,7 @@ public class BungeeMessageListener implements PluginMessageListener {
                     }
 
                     default:
-                        Bukkit.getLogger().log(Level.WARNING, "[BungeeTowny] Unknown BungeeTowny command \"" + command + "\" received");
+                        BungeeTowny.getThisPlugin().getLogger().log(Level.WARNING, "Unknown BungeeTowny messaging channel command \"" + command + "\" received");
                         break;
                 }
 

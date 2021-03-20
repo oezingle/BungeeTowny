@@ -57,7 +57,7 @@ public class Channel {
             isJSON = false;
         }
 
-        Bukkit.getLogger().info("[BungeeTowny] Registered chat channel: " + name);
+        BungeeTowny.getThisPlugin().getLogger().info("Registered chat channel: " + name);
     }
 
     public String getFormat() {
@@ -122,6 +122,6 @@ public class Channel {
             return;
         }
 
-        Bukkit.getLogger().info("[BungeeTowny] Unregistered chat channel: " + name);
+        BungeeTowny.getThisPlugin().getLogger().info("[BungeeTowny] Unregistered chat channel: " + name);
     }
 }

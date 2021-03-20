@@ -1,14 +1,17 @@
 package com.paratopiamc.bungee_towny.chat;
 
+import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.chat.chatcommand.ChatCommandExecutor;
 import com.paratopiamc.bungee_towny.chat.chatcommand.ChatCommandTabCompletor;
 import com.paratopiamc.bungee_towny.chat.mutecommand.MuteCommandExecutor;
 import com.paratopiamc.bungee_towny.chat.mutecommand.UnmuteCommandExecutor;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
+import java.util.logging.Level;
 
 public abstract class Channels {
 
@@ -30,7 +33,7 @@ public abstract class Channels {
             if (channel != null) {
                 channels.put(key, new Channel(channel, format));
             } else {
-                System.out.println("Channel " + key + " could not be registered");
+                BungeeTowny.getThisPlugin().getLogger().log(Level.WARNING, "Channel " + key + " could not be registered");
             }
         }
 
@@ -39,7 +42,6 @@ public abstract class Channels {
 
         plugin.getCommand("mute").setExecutor(new MuteCommandExecutor());
         plugin.getCommand("unmute").setExecutor(new UnmuteCommandExecutor());
-
     }
 
     public static void unRegisterChannels() {
