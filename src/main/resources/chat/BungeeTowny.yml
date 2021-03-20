@@ -1,4 +1,5 @@
 #TODO this
 
 mute:
+  enabled: true
   notify: true
