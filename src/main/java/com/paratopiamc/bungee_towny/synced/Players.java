@@ -1,6 +1,8 @@
 package com.paratopiamc.bungee_towny.synced;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
+import com.paratopiamc.bungee_towny.sql.SQLHost;
+import com.paratopiamc.bungee_towny.sql.SQLMessage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +10,7 @@ import java.sql.SQLException;
 public abstract class Players {
     public static String getTown(String uuid) {
         try {
-            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT town FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT town FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 String value = results.getString("town");
@@ -22,7 +24,7 @@ public abstract class Players {
     }
 
     public static void setTown(String town, String uuid) {
-        BungeeTowny.sqlhost.getMessenger().executeSQL(
+        SQLHost.getMessenger().executeSQL(
                 " UPDATE players" +
                         "    SET town = '" + town + "'" +
                         "WHERE uuid ='" + uuid + "';"
@@ -30,7 +32,7 @@ public abstract class Players {
     }
 
     public static void setNation(String nation, String uuid) {
-        BungeeTowny.sqlhost.getMessenger().executeSQL(
+        SQLHost.getMessenger().executeSQL(
                 " UPDATE players" +
                         "    SET nation = '" + nation + "'" +
                         "WHERE uuid ='" + uuid + "';"
@@ -38,7 +40,7 @@ public abstract class Players {
     }
 
     public static void setChannel(String channelName, String uuid) {
-        BungeeTowny.sqlhost.getMessenger().executeSQL(
+        SQLHost.getMessenger().executeSQL(
                 " UPDATE players" +
                         "    SET channel = '" + channelName + "'" +
                         "WHERE uuid ='" + uuid + "';"
@@ -47,7 +49,7 @@ public abstract class Players {
 
     public static String getNation(String uuid) {
         try {
-            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT nation FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT nation FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 String value = results.getString("nation");
@@ -62,7 +64,7 @@ public abstract class Players {
 
     public static String getChannel(String uuid) {
         try {
-            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT channel FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT channel FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 String value = results.getString("channel");
@@ -77,7 +79,7 @@ public abstract class Players {
 
     public static boolean isMuted(String uuid) {
         try {
-            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT muted FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT muted FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 Boolean value = results.getBoolean("muted");
@@ -91,7 +93,7 @@ public abstract class Players {
     }
 
     public static void setMuted(String uuid, boolean mute) {
-        BungeeTowny.sqlhost.getMessenger().executeSQL(
+        SQLHost.getMessenger().executeSQL(
                 " UPDATE players " +
                         "SET muted = " + mute + " " +
                         "WHERE uuid ='" + uuid + "';"
@@ -100,7 +102,7 @@ public abstract class Players {
 
     public static String getTitle(String uuid) {
         try {
-            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT title FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT title FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 String value = results.getString("title");

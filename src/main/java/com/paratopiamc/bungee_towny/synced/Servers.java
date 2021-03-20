@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public abstract class Servers {
 
     public String getServerByName(String name) {
-        ResultSet result = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT server_uuid FROM servers WHERE server_name = '" + name + "';");
+        ResultSet result = SQLHost.getMessenger().executeSelectSQL("SELECT server_uuid FROM servers WHERE server_name = '" + name + "';");
 
         try {
             while (result.next()) {
@@ -27,7 +27,7 @@ public abstract class Servers {
     }
 
     public String getServerByUUID(String uuid) {
-        ResultSet result = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT server_name FROM servers WHERE server_uuid = '" + uuid + "';");
+        ResultSet result = SQLHost.getMessenger().executeSelectSQL("SELECT server_name FROM servers WHERE server_uuid = '" + uuid + "';");
 
         try {
             while (result.next()) {

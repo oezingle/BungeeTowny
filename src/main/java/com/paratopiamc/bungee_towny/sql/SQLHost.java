@@ -11,18 +11,17 @@ import java.util.HashMap;
 
 //TODO consider an abstract class here, with an init() function
 
-public class SQLHost {
+public abstract class SQLHost {
 
-    private SQLMessage messenger;
+    private static SQLCredentials credentials;
 
-    public SQLHost(ConfigurationSection mysql) {
-        String host = mysql.getString("host");
-        String port = mysql.getString("port");
-        String database = mysql.getString("database");
-        String username = mysql.getString("username");
-        String password = mysql.getString("password");
+    private static SQLMessage messenger;
 
-        messenger = new SQLMessage(host, port, database, username, password);
+    public static void init(ConfigurationSection mysql) {
+
+        credentials = SQLCredentials.fromConfigSection(mysql);
+
+        messenger = new SQLMessage(credentials);
 
         //server_uuid | server_name
         HashMap<String, String> table_info = new HashMap<>();
@@ -94,7 +93,7 @@ public class SQLHost {
 
     }
 
-    public void set_server(String uuid, String name, boolean usingTowny) {
+    public static void set_server(String uuid, String name, boolean usingTowny) {
         //delete the old entry
         messenger.delete("servers","WHERE server_uuid = '" + uuid + "';");
 
@@ -121,7 +120,11 @@ public class SQLHost {
 
     }
 
-    public SQLMessage getMessenger() {
+    public static SQLCredentials getCredentials() {
+        return credentials;
+    }
+
+    public static SQLMessage getMessenger() {
         return messenger;
     }
 

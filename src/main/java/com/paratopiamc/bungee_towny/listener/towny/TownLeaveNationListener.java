@@ -2,7 +2,7 @@ package com.paratopiamc.bungee_towny.listener.towny;
 
 import com.palmergames.bukkit.towny.event.nation.NationTownLeaveEvent;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.paratopiamc.bungee_towny.BungeeTowny;
+import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,7 +17,7 @@ public class TownLeaveNationListener implements Listener {
         String town = event.getTown().getName();
 
         //set nation with sql
-        BungeeTowny.sqlhost.getMessenger().executeSQL(
+        SQLHost.getMessenger().executeSQL(
                 " UPDATE players" +
                         "    SET nation = 'nationless'" +
                         "WHERE town ='" + town + "';"

@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.listener.Listeners;
+import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +29,7 @@ public class PlayerJoinListener implements Listener {
         //create a player in the sql database
         boolean alreadyExists = false;
         try {
-            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT * FROM players WHERE uuid = '" + uuid + "'");
+            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT * FROM players WHERE uuid = '" + uuid + "'");
 
             alreadyExists = results.next();
         } catch (SQLException e) {
@@ -36,17 +37,17 @@ public class PlayerJoinListener implements Listener {
         }
 
         if (!alreadyExists) {
-            /*BungeeTowny.sqlhost.getMessenger().executeSQL(
+            /*SQLHost.getMessenger().executeSQL(
                     "INSERT INTO players (uuid, name, town, channel, nation, title, res, muted) VALUES (\"" + uuid + "\",\"" + name + "\",null,\"" + "general" + "\", null, null, null, false);"
             );*/
 
-            BungeeTowny.sqlhost.getMessenger().executeSQL(
+            SQLHost.getMessenger().executeSQL(
                     "INSERT INTO players (uuid, name) VALUES (\"" + uuid + "\",\"" + name + "\");"
             );
         }
 
         //update the username
-        BungeeTowny.sqlhost.getMessenger().executeSQL(
+        SQLHost.getMessenger().executeSQL(
                 " UPDATE players" +
                         "    SET name = '" + name + "'" +
                         "WHERE uuid ='" + uuid + "';"
@@ -57,7 +58,7 @@ public class PlayerJoinListener implements Listener {
             Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
             String title = resident.getTitle();
 
-            BungeeTowny.sqlhost.getMessenger().executeSQL(
+            SQLHost.getMessenger().executeSQL(
                     " UPDATE players" +
                             "    SET title = '" + title + "'" +
                             "WHERE uuid ='" + uuid + "';"

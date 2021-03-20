@@ -5,7 +5,6 @@ import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessageListener;
 import com.paratopiamc.bungee_towny.chat.Channels;
 import com.paratopiamc.bungee_towny.chat.ChatColors;
 import com.paratopiamc.bungee_towny.chat.ChatFormats;
-import com.paratopiamc.bungee_towny.chat.chatcommand.ChatCommandExecutor;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.Bukkit;
@@ -35,8 +34,6 @@ public final class BungeeTowny extends JavaPlugin {
     static File server_uuid_yml;
 
     public static BukkitTask waitForBungeePlayer;
-
-    public static SQLHost sqlhost;
 
     @Override
     public void onEnable() {
@@ -78,13 +75,13 @@ public final class BungeeTowny extends JavaPlugin {
         }
         FileConfiguration sqlconfig = YamlConfiguration.loadConfiguration(sqlfile);
 
-        sqlhost = new SQLHost(sqlconfig.getConfigurationSection(""));
+        SQLHost.init(sqlconfig.getConfigurationSection(""));
 
         try { //We use a try catch to avoid errors, hopefully we don't get any.
             Class.forName("com.mysql.jdbc.Driver"); //this accesses Driver in jdbc.
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            getLogger().log(Level.SEVERE, "jdbc driver unavailable!");
+            getLogger().log(Level.SEVERE, "jdbc sql driver unavailable!");
 
             Bukkit.getPluginManager().disablePlugin(this);
         }
@@ -125,7 +122,7 @@ public final class BungeeTowny extends JavaPlugin {
             channelFile = new File(getDataFolder(), "chat/Channels.yml");
             FileConfiguration channelConfig = YamlConfiguration.loadConfiguration(channelFile);
 
-            sqlhost.set_config("channels", channelFile);
+            SQLHost.set_config("channels", channelFile);
 
             //formats ==================================================================================
             File chatConfigFile = new File(getDataFolder(), "chat/ChatConfig.yml");
@@ -139,7 +136,7 @@ public final class BungeeTowny extends JavaPlugin {
             ChatColors.init(chatConfig.getConfigurationSection("colour"));
             ChatFormats.init(chatConfig.getConfigurationSection("tag_formats"));
 
-            sqlhost.set_config("chatConfig", chatConfigFile);
+            SQLHost.set_config("chatConfig", chatConfigFile);
 
             //messages ==================================================================================
             File messageFile = new File(getDataFolder(), "chat/Messages.yml");
@@ -152,7 +149,7 @@ public final class BungeeTowny extends JavaPlugin {
 
             Translation.setFromConfig(messageConfig,"chat.");
 
-            sqlhost.set_config("chatMessages", messageFile);
+            SQLHost.set_config("chatMessages", messageFile);
 
             //BungeeTowny ================================================================================
             File newChatSettingsFile = new File(getDataFolder(), "chat/BungeeTowny.yml");
@@ -163,7 +160,7 @@ public final class BungeeTowny extends JavaPlugin {
             newChatSettingsFile = new File(getDataFolder(), "chat/BungeeTowny.yml");
             FileConfiguration newChatConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
 
-            sqlhost.set_config("newChatSettings", newChatSettingsFile);
+            SQLHost.set_config("newChatSettings", newChatSettingsFile);
 
             //get the channels as commands
             ConfigurationSection channels = channelConfig.getConfigurationSection("Channels");
@@ -260,7 +257,11 @@ public final class BungeeTowny extends JavaPlugin {
     static void update_server_listing() {
         //not required because of the other servers
         //Servers.set_uuid(serverUUID, serverName);
-        BungeeTowny.sqlhost.set_server(serverUUID, serverName, false);
+        SQLHost.set_server(serverUUID, serverName, Listeners.isUsingTowny());
+
+    }
+
+    static void reload() {
 
     }
 }

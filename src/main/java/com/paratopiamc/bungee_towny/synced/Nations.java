@@ -1,6 +1,7 @@
 package com.paratopiamc.bungee_towny.synced;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
+import com.paratopiamc.bungee_towny.sql.SQLHost;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,9 +10,9 @@ import java.util.List;
 
 public abstract class Nations {
 
-    public static List<String> getResidents(String nation) {
+    public List<String> getResidents(String nation) {
         try {
-            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT uuid FROM players WHERE nation  = '" + nation + "';");
+            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT uuid FROM players WHERE nation  = '" + nation + "';");
 
             List<String> list = new ArrayList<>();
 
@@ -28,7 +29,7 @@ public abstract class Nations {
 
     public static List<String> getResidentNames(String nation) {
         try {
-            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT name FROM players WHERE nation  = '" + nation + "';");
+            ResultSet results = SQLHost.getMessenger().executeSelectSQL("SELECT name FROM players WHERE nation  = '" + nation + "';");
 
             List<String> list = new ArrayList<>();
 

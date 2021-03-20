@@ -23,12 +23,12 @@ public class SQLMessage {
 
     public static HashMap<String, Set<String>> tables;
 
-    public SQLMessage(String host, String port, String database, String username, String password) {
-        this.host = host;
-        this.port = port;
-        this.database = database;
-        this.username = username;
-        this.password = password;
+    public SQLMessage(SQLCredentials credentials) {
+        this.host = credentials.getHost();
+        this.port = credentials.getPort();
+        this.database = credentials.getDatabase();
+        this.username = credentials.getUsername();
+        this.password = credentials.getPassword();
 
         tables = new HashMap<>();
 
