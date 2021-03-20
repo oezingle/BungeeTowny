@@ -21,7 +21,8 @@ public class MuteCommandExecutor implements CommandExecutor {
                 //mute the player
 
                 //notify them
-                player.sendMessage(Translation);
+                //TODO check for chat/BungeeTowny.yml > mute.notify
+                player.sendMessage(replaceColors(Translation.of("chat.mute")));
 
                 //return true
                 return true;
