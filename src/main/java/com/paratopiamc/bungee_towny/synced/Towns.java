@@ -26,7 +26,7 @@ public abstract class Towns {
         return null;
     }
 
-    public static List<String> getAllResidentNames() {
+    public static List<String> getAllNames() {
         try {
             ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT name FROM players;");
 
@@ -34,6 +34,23 @@ public abstract class Towns {
 
             while (results.next()) {
                 list.add(results.getString("name"));
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static List<String> getAllUUIDs() {
+        try {
+            ResultSet results = BungeeTowny.sqlhost.getMessenger().executeSelectSQL("SELECT uuid FROM players;");
+
+            List<String> list = new ArrayList<>();
+
+            while (results.next()) {
+                list.add(results.getString("uuid"));
             }
             return list;
         } catch (SQLException e) {

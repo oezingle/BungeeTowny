@@ -18,6 +18,7 @@ import com.paratopiamc.bungee_towny.synced.Towns;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -25,6 +26,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 public class ChatSendEvent extends Event {
 
@@ -117,7 +120,7 @@ public class ChatSendEvent extends Event {
                 Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
                 chatMessage = chatMessage
-                        .replace("{title}",resident.getTitle())
+                        .replace("{title}", resident.getTitle())
                         .replace("{permprefix}", TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(resident, "prefix"))
                         .replace("{permsuffix}", TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(resident, "suffix"))
                         .replace("{permuserprefix}", TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(resident, "userprefix"))
@@ -165,31 +168,38 @@ public class ChatSendEvent extends Event {
 
                 switch (channel.getType()) {
                     case TOWN:
-                        recipients = Towns.getResidentNames(town);
+                        if (channel.isJSON()) {
+                            jsonSend(Towns.getResidentNames(town), chatMessage);
+                        } else {
+                            simpleSend(Towns.getResidentNames(town), chatMessage);
+                        }
                         break;
                     case NATION:
-                        recipients = Nations.getResidentNames(nation);
+                        if (channel.isJSON()) {
+                            jsonSend(Nations.getResidentNames(nation), chatMessage);
+                        } else {
+                            simpleSend(Nations.getResidentNames(nation), chatMessage);
+                        }
                         break;
                     case GLOBAL:
-                        recipients = Towns.getAllResidentNames();
+                        if (channel.isJSON()) {
+                            jsonSend(Towns.getAllNames(), chatMessage);
+                        } else {
+                            simpleSend(Towns.getAllNames(), chatMessage);
+                        }
                         break;
                     default:
-                }
+                        //send a plugin message to the other servers, because we have to check permissions with these
+                        Plugin plugin = Listeners.getPlugin();
+                        BungeeMessage messages = new BungeeMessage(plugin);
 
-                //Bukkit.broadcastMessage(chatMessage);
+                        for (String recipient : recipients) {
+                            messages.writeStrings(new String[]{"", recipient, chatMessage});
 
-                Plugin plugin = Listeners.getPlugin();
-                BungeeMessage messages = new BungeeMessage(plugin);
+                            messages.send();
+                        }
 
-                for (String recipient : recipients) {
-
-                    if (isMessageJson(playerMessage)) {
-                        messages.writeStrings(new String[]{"MessageRaw", recipient, chatMessage});
-                    } else {
-                        messages.writeStrings(new String[]{"Message", recipient, chatMessage});
-                    }
-
-                    messages.send();
+                        break;
                 }
 
             } else {
@@ -228,16 +238,6 @@ public class ChatSendEvent extends Event {
         return "";
     }
 
-    private boolean isMessageJson(String message) {
-        try {
-            JsonObject jsonObject = new Gson().fromJson(message, JsonObject.class);
-
-            return jsonObject.has("text");
-        } catch (JsonSyntaxException e) {
-            return false;
-        }
-    }
-
     private String toUpperStart(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
@@ -245,5 +245,27 @@ public class ChatSendEvent extends Event {
     @Override
     public HandlerList getHandlers() {
         return handlers;
+    }
+
+    public void simpleSend(List<String> recipients, String message) {
+        Plugin plugin = Listeners.getPlugin();
+        BungeeMessage messages = new BungeeMessage(plugin);
+
+        for (String recipient : recipients) {
+            messages.writeStrings(new String[]{"Message", recipient, message});
+
+            messages.send();
+        }
+    }
+
+    public void jsonSend(List<String> recipients, String message) {
+        Plugin plugin = Listeners.getPlugin();
+        BungeeMessage messages = new BungeeMessage(plugin);
+
+        for (String recipient : recipients) {
+            messages.writeStrings(new String[]{"MessageRaw", recipient, message});
+
+            messages.send();
+        }
     }
 }

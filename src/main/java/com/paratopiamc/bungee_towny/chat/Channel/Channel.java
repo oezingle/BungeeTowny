@@ -1,5 +1,8 @@
 package com.paratopiamc.bungee_towny.chat.Channel;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class Channel {
@@ -12,6 +15,8 @@ public class Channel {
     //private List<String> commands;
 
     private int range;
+
+    private boolean isJSON;
 
     public Channel(ConfigurationSection config, String format) {
 
@@ -38,6 +43,14 @@ public class Channel {
                 .replace("{channelTag}",channeltag)
                 .replace("{msgcolour}", messagecolour);
 
+        try {
+            JsonObject jsonObject = new Gson().fromJson(format, JsonObject.class);
+
+            isJSON = jsonObject.has("text");
+        } catch (JsonSyntaxException e) {
+            isJSON = false;
+        }
+
         //System.out.println("Registered channel: " + name);
     }
 
@@ -57,8 +70,8 @@ public class Channel {
         return name;
     }
 
-    private static String replaceColors(String message) {
-        return message.replace("&", "\u00a7");
+    public boolean isJSON() {
+        return isJSON;
     }
 
     /*boolean registerChannelCommand(String command) {
