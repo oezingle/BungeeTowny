@@ -21,6 +21,7 @@ public class MuteCommandExecutor implements CommandExecutor {
                 //mute the player
 
                 //notify them
+                player.sendMessage(Translation);
 
                 //return true
                 return true;
