@@ -28,7 +28,8 @@ public class ChatCommandExecutor implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
         if (!(sender instanceof Player)) {
-            return false;
+            sender.sendMessage(replaceColors("&cThis sender isn't allowed"));
+            return true;
         }
 
         Player player = ((Player) sender).getPlayer();
@@ -38,64 +39,37 @@ public class ChatCommandExecutor implements CommandExecutor {
             // /chat
             sender.sendMessage(replaceColors(Translation.of("chat.current_channel").replace("${CHANNEL}", Players.getChannel(uuid))));
             return true;
-        } else if (args.length == 1) {
-            // /chat <channel>
-            for (Channel channel : channels.values()) {
-                if (args[0].equalsIgnoreCase(channel.getName()) && player.hasPermission(channel.getPermission())) {
-                    if (channel.getName().equals("town") && Players.getTown(uuid).equalsIgnoreCase("townless")) {
-                        sender.sendMessage(no_town);
-
-                        //TODO not this
-                        Bukkit.dispatchCommand(player, "chat general");
-                        return true;
-                    }
-                    if (channel.getName().equals("nation") && Players.getNation(uuid).equalsIgnoreCase("nationless")) {
-                        sender.sendMessage(no_nation);
-
-                        //TODO not this
-                        Bukkit.dispatchCommand(player, "chat general");
-                        return true;
-                    }
-
-                    sender.sendMessage(replaceColors(Translation.of("chat.channel_switch").replace("${CHANNEL}", channel.getName())));
-
-
-                    //switch the channel
-                    Players.setChannel(channel.getName(), uuid);
-
-                    return true;
-                }
-            }
-
-            sender.sendMessage(replaceColors(Translation.of("chat.not_a_channel")));
-            return true;
         } else {
-            // /chat <channel> <msg>
-            String message = "";
-            for (short i = 1; i < args.length; i++) {
-                message += args[i];
-            }
-
             for (Channel channel : channels.values()) {
-                if (args[0].equalsIgnoreCase(channel.getName()) && player.hasPermission(channel.getPermission())) {
+                if (args[0].equalsIgnoreCase(channel.getName()) && sender.hasPermission(channel.getPermission())) {
                     if (channel.getName().equals("town") && Players.getTown(uuid).equalsIgnoreCase("townless")) {
                         sender.sendMessage(no_town);
-
-                        //TODO not this
-                        Bukkit.dispatchCommand(player, "chat general");
                         return true;
                     }
                     if (channel.getName().equals("nation") && Players.getNation(uuid).equalsIgnoreCase("nationless")) {
                         sender.sendMessage(no_nation);
-
-                        //TODO not this
-                        Bukkit.dispatchCommand(player, "chat general");
+                        return true;
+                    }
+                    if (channel.getName().equals("alliance")) {
+                        sender.sendMessage(replaceColors("&cAlliance chats are currently not implemented"));
                         return true;
                     }
 
-                    ChatSendEvent event = new ChatSendEvent(message, channel, ((Player) sender).getPlayer(), !Bukkit.isPrimaryThread());
-                    Bukkit.getPluginManager().callEvent(event);
+                    if (args.length == 1) {
+                        sender.sendMessage(replaceColors(Translation.of("chat.channel_switch").replace("${CHANNEL}", channel.getName())));
 
+                        //switch the channel
+                        Players.setChannel(channel.getName(), uuid);
+                    } else {
+                        // /chat <channel> <msg>
+                        String message = "";
+                        for (short i = 1; i < args.length; i++) {
+                            message += args[i] + " ";
+                        }
+                        ChatSendEvent event = new ChatSendEvent(message, channel, ((Player) sender).getPlayer(), !Bukkit.isPrimaryThread());
+                        Bukkit.getPluginManager().callEvent(event);
+
+                    }
                     return true;
                 }
             }
