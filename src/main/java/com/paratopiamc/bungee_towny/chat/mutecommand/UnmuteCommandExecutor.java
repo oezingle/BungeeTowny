@@ -33,7 +33,7 @@ public class UnmuteCommandExecutor implements CommandExecutor {
 
                 //notify them
                 //TODO check for chat/BungeeTowny.yml > mute.notify
-                player.sendMessage(replaceColors(Translation.of("chat.mute")));
+                player.sendMessage(replaceColors(Translation.of("chat.unmuted")));
 
                 //return true
                 return true;

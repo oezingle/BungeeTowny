@@ -7,6 +7,7 @@ en:
   bad_config: "&cYour admin did not set up the chat correctly. Please report this error"
   current_channel: "&fYou're speaking in the &a${CHANNEL}&f channel"
   muted: "&cYou cannnot send chat messages as you are muted"
+  unmuted: "&aYou have been unmuted"
   bad_args: "&cWrong amount of arguments!"
   admin:
     player_not_found: "&cThat player could not be found!"
