@@ -11,5 +11,6 @@ en:
   admin:
     player_not_found: "&cThat player could not be found!"
     already_muted: "&eThat player is already muted"
+    already_unmuted: "&eThat player is already not muted"
     mute_success: "&aMuted ${NAME}"
     unmute_success: "&aUnmuted ${NAME}"

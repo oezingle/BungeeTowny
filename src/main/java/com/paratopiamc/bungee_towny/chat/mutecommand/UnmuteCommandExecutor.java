@@ -8,7 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class MuteCommandExecutor implements CommandExecutor {
+public class UnmuteCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
 
         if (args.length < 1 || args.length > 1) {
@@ -24,10 +24,10 @@ public class MuteCommandExecutor implements CommandExecutor {
                 String name = player.getName();
 
                 if (Players.isMuted(uuid)) {
-                    sender.sendMessage(replaceColors(Translation.of("chat.admin.already_muted")));
+                    sender.sendMessage(replaceColors(Translation.of("chat.admin.already_unmuted")));
                     return true;
                 } else {
-                    sender.sendMessage(replaceColors(Translation.of("chat.admin.mute_success").replace("${NAME}",name)));
+                    sender.sendMessage(replaceColors(Translation.of("chat.admin.unmute_success").replace("${NAME}",name)));
                     Players.setMuted(uuid, true);
                 }
 
