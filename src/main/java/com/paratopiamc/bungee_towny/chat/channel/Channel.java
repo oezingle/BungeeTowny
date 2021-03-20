@@ -3,16 +3,23 @@ package com.paratopiamc.bungee_towny.chat.channel;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.paratopiamc.bungee_towny.chat.chatcommand.ChatAliasExecutor;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.ConfigurationSection;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Channel {
     private ChannelType type;
-    //private ChannelCommandExecutor executor;
 
     private String permission;
     private String name;
     private String format;
-    //private List<String> commands;
+    private List<String> commands;
+    private List<ChatAliasExecutor> executors;
 
     private int range;
 
@@ -24,17 +31,15 @@ public class Channel {
         type = ChannelType.fromString(config.getString("type"));
         name = config.getName();
 
-        //commands = config.getStringList("commands");
+        commands = config.getStringList("commands");
 
         range = config.getInt("range");
 
-        //TODO add /chat <channel> and alias to that
+        executors = new ArrayList<>();
 
-        /*registerChannelCommand(commands.get(0));
-        commands.remove(0);
         for (String command : commands) {
-            registerAlias(command);
-        }*/
+            registerChannelCommand(command);
+        }
 
         String channeltag = config.getString("channeltag");
         String messagecolour = config.getString("messagecolour");
@@ -51,7 +56,7 @@ public class Channel {
             isJSON = false;
         }
 
-        //System.out.println("Registered channel: " + name);
+        System.out.println("Registered channel: " + name);
     }
 
     public String getFormat() {
@@ -74,16 +79,16 @@ public class Channel {
         return isJSON;
     }
 
-    /*boolean registerChannelCommand(String command) {
+    boolean registerChannelCommand(String command) {
         try {
             final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 
             bukkitCommandMap.setAccessible(true);
             CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
 
-            executor = new ChannelCommandExecutor(command, name, permission);
+            ChatAliasExecutor executor =  new ChatAliasExecutor(command, name);
 
-            commandMap.register(command, executor);
+            commandMap.register("bungeetowny", executor);
 
             return true;
         } catch (Exception e) {
@@ -93,7 +98,7 @@ public class Channel {
         }
     }
 
-    void registerAlias(String command) {
+    /*void registerAlias(String command) {
         List<String> aliases = executor.getAliases();
         aliases.add(command);
 
@@ -101,18 +106,20 @@ public class Channel {
 
     }*/
 
-    /*public void unRegister() {
+    public void unRegister() {
         try {
-            final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-            bukkitCommandMap.setAccessible(true);
+            for (ChatAliasExecutor executor : executors) {
+                final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+                bukkitCommandMap.setAccessible(true);
 
-            CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+                CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
 
-            executor.unregister(commandMap);
+                executor.unregister(commandMap);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         System.out.println("Unregistered channel: " + name);
-    }*/
+    }
 }

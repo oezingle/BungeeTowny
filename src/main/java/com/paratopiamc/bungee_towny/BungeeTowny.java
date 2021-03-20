@@ -56,7 +56,7 @@ public final class BungeeTowny extends JavaPlugin {
         boolean loaded_uuid = server_uuid_yml.exists();
 
         if (!loaded_uuid) {
-            saveResource("server_uuid.yml",false);
+            saveResource("server_uuid.yml", false);
 
             serverUUID = UUID.randomUUID().toString();
 
@@ -71,7 +71,7 @@ public final class BungeeTowny extends JavaPlugin {
         //SQL
         File sqlfile = new File(getDataFolder(), "mysql.yml");
         if (!sqlfile.exists()) {
-            saveResource("mysql.yml",false);
+            saveResource("mysql.yml", false);
         }
         FileConfiguration sqlconfig = YamlConfiguration.loadConfiguration(sqlfile);
 
@@ -95,6 +95,8 @@ public final class BungeeTowny extends JavaPlugin {
         //Towny
         if (Bukkit.getPluginManager().getPlugin("Towny") == null) {
             getLogger().info("Could not find Towny. Your server may be missing some functionality");
+
+
         } else {
             Listeners.usingTowny(true);
         }
@@ -141,13 +143,13 @@ public final class BungeeTowny extends JavaPlugin {
             //messages ==================================================================================
             File messageFile = new File(getDataFolder(), "chat/Messages.yml");
             if (!messageFile.exists()) {
-                saveResource("chat/Messages.yml",false);
+                saveResource("chat/Messages.yml", false);
             }
 
             messageFile = new File(getDataFolder(), "chat/Messages.yml");
             FileConfiguration messageConfig = YamlConfiguration.loadConfiguration(messageFile);
 
-            Translation.setFromConfig(messageConfig,"chat.");
+            Translation.setFromConfig(messageConfig, "chat.");
 
             SQLHost.set_config("chatMessages", messageFile);
 
@@ -166,7 +168,7 @@ public final class BungeeTowny extends JavaPlugin {
             ConfigurationSection channels = channelConfig.getConfigurationSection("Channels");
 
             Channels.init(this, channels, chatConfig);
-    }
+        }
 
         //TODO sync configs
 
@@ -240,7 +242,7 @@ public final class BungeeTowny extends JavaPlugin {
         try {
             //TODO file header (for comment)
             server_uuid_config.save(server_uuid_yml);
-        } catch(IOException exception) {
+        } catch (IOException exception) {
             exception.printStackTrace();
 
             //TODO this
@@ -262,6 +264,6 @@ public final class BungeeTowny extends JavaPlugin {
     }
 
     static void reload() {
-
+        Listeners.reload();
     }
 }

@@ -1,6 +1,5 @@
 package com.paratopiamc.bungee_towny.synced;
 
-import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import com.paratopiamc.bungee_towny.sql.SQLMessage;
 

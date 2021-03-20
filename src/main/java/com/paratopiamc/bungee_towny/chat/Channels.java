@@ -44,7 +44,7 @@ public abstract class Channels {
 
     public static void unRegisterChannels() {
         for (Channel channel : channels.values()) {
-            //channel.unRegister();
+            channel.unRegister();
         }
     }
 
