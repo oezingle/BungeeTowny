@@ -11,7 +11,6 @@ public class TownJoinListener implements Listener {
 
     @EventHandler
     public void onTownJoin(TownAddResidentEvent event) {
-        //System.out.println(event.getEventName());
         String uuid = event.getResident().getUUID().toString();
 
         String town = "townless";
@@ -31,5 +30,8 @@ public class TownJoinListener implements Listener {
         } catch (NotRegisteredException e) {}
         //set nation with sql
         Players.setNation(nation, uuid);
+
+        //add to the queue
+        ///ta town test add zingle_
     }
 }
