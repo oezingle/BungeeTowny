@@ -13,7 +13,6 @@ import com.paratopiamc.bungee_towny.synced.Nations;
 import com.paratopiamc.bungee_towny.synced.Players;
 import com.paratopiamc.bungee_towny.synced.Towns;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -30,9 +29,14 @@ public class ChatSendEvent extends Event {
     public ChatSendEvent(String playerMessage, Channel channel, Player player, boolean async) {
         super(async);
 
-        String format = channel.getFormat();
 
         String uuid = player.getUniqueId().toString();
+
+        if (channel == null) {
+            Bukkit.dispatchCommand(player, "chat general");
+        }
+
+        String format = channel.getFormat();
 
         //TODO sync with essentials
         if (Players.isMuted(uuid)) {

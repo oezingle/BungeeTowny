@@ -182,6 +182,8 @@ public final class BungeeTowny extends JavaPlugin {
     }
 
     public static void reloadMessages() {
+        Translation.reset();
+
         //chat/<file>
         if (thisPlugin.getConfig().getBoolean("chat")) {
             //messages ==================================================================================
@@ -249,6 +251,7 @@ public final class BungeeTowny extends JavaPlugin {
     }
 
     public static void reloadChat() {
+        thisPlugin.reloadConfig();
         reloadMessages();
 
         //figure out if chat features are enabled, and do the thing!
@@ -306,6 +309,10 @@ public final class BungeeTowny extends JavaPlugin {
             ConfigurationSection channels = channelConfig.getConfigurationSection("Channels");
 
             Channels.init(thisPlugin, channels, chatConfig, newChatConfig);
+        } else {
+            Listeners.usingChat(false);
+
+            Channels.unRegisterChannels();
         }
     }
 

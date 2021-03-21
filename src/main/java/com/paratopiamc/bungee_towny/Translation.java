@@ -17,6 +17,9 @@ public abstract class Translation {
         lang = newLang.toLowerCase();
     }
 
+    public static void reset() {
+        translations = new HashMap<>();
+    }
 
     //translation with replaced colors and a not-null value
     public static String of(String key) {
@@ -43,20 +46,24 @@ public abstract class Translation {
     }
 
     public static void setFromConfig(ConfigurationSection config, String prefix) {
-        config = config.getConfigurationSection(lang);
+        try {
+            config = config.getConfigurationSection(lang);
 
-        if (prefix != "" && !prefix.endsWith(".")) {
-            prefix = prefix + ".";
-        }
+            if (prefix != "" && !prefix.endsWith(".")) {
+                prefix = prefix + ".";
+            }
 
-        //set the keys using the configurationSection
-        Set<String> keys = config.getKeys(true);
-        for (String key : keys) {
-            String value = config.getString(key);
+            //set the keys using the configurationSection
+            Set<String> keys = config.getKeys(true);
+            for (String key : keys) {
+                String value = config.getString(key);
 
-            setValue(prefix + key, value);
+                setValue(prefix + key, value);
 
-            //BungeeTowny.getThisPlugin().getLogger().info(prefix + key + " | " + value);
+                //BungeeTowny.getThisPlugin().getLogger().info(prefix + key + " | " + value);
+            }
+        } catch (Exception e) {
+            BungeeTowny.getThisPlugin().getLogger().info("The " + prefix + " message file does not have your language");
         }
     }
 
