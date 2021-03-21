@@ -13,20 +13,23 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerLeaveListener implements Listener {
 
-    @EventHandler (priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String uuid = player.getUniqueId().toString();
 
         if (Listeners.isUsingTowny()) {
             Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-            String title = resident.getTitle();
+            try {
+                String title = resident.getTitle();
 
-            new SQLMessage(SQLHost.getCredentials()).executeSQL(
-                    " UPDATE players" +
-                            "    SET title = '" + title + "'" +
-                            "WHERE uuid ='" + uuid + "';"
-            );
+                new SQLMessage(SQLHost.getCredentials()).executeSQL(
+                        " UPDATE players" +
+                                "    SET title = '" + title + "'" +
+                                "WHERE uuid ='" + uuid + "';"
+                );
+            } catch (Exception e) {
+            }
         }
     }
 }

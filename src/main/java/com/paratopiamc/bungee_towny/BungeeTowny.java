@@ -5,11 +5,16 @@ import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessageListener;
 import com.paratopiamc.bungee_towny.chat.Channels;
 import com.paratopiamc.bungee_towny.chat.ChatColors;
 import com.paratopiamc.bungee_towny.chat.ChatFormats;
+import com.paratopiamc.bungee_towny.chat.command.ChatAliasExecutor;
 import com.paratopiamc.bungee_towny.command.AdminCommandExecutor;
 import com.paratopiamc.bungee_towny.command.AdminCommandTabCompletor;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,6 +25,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -103,7 +110,6 @@ public final class BungeeTowny extends JavaPlugin {
         //remove commands
         getLogger().info("Removing commands..");
         Channels.unRegisterChannels();
-        getCommand("chat").setExecutor(null);
 
         getLogger().info("BungeeTowny Disabled");
     }

@@ -91,6 +91,7 @@ public abstract class Listeners {
         chatListener = null;
 
         joinListener = null;
+        leaveListener = null;
     }
 
     public static Plugin getPlugin() {
