@@ -25,22 +25,32 @@ commands:
     description: a stand-in for towny's /t and /town command
     aliases: [t]
   bungeetowny:
-    permission: bungeetowny.admin
     usage: Syntax error. Use /<command>
     description: the administrative command
+  message:
+    usage: Syntax error. Use /<command>
+    description: similar to vanilla msg, but players can toggle and send messages across the network
+    permission: bungeetowny.chat.msg
 
 permissions:
   bungeetowny.chat:
     default: true
     description: allows use of /chat
+    children:
+      - bungeetowny.chat.msg
+  bungeetowny.chat.msg:
+    description: allows use of /msg <name> across the bungeetowny network
   bungeetowny.mute:
     description: allows staff to /mute and /unmute
   bungeetowny.admin:
     description: admin parent node
     children:
       - bungeetowny.admin.reload
+      - bungeetowny.admin.status
   bungeetowny.admin.reload:
-    description: allows the /bungeetowny reload command
+    description: allows the [/bungeetowny reload] command
+  bungeetowny.admin.status:
+    description: allows the [/bungeetowny status] command
   bungeetowny.town:
     default: true
     description: allows using /town [arg] if towny isn't present on the server

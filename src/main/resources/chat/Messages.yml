@@ -18,9 +18,11 @@ en:
   #Depends on the msg.enabled Chat/BungeeTowny.yml
   msg:
     convo_expired: "&fThe conversation you were in has expired"
-    convo_set: "&fYou are now in a conversation with ${NAME}. It will expire in ${TIME} minutes"
+    convo_set: "&fYou are now in a conversation with {playername}. It will expire in {time} minutes"
+    convo_set_no_expire: "&fYou are now in a conversation with {playername}."
     not_online: "&cThat player is not online!"
     too_few_args: "&cYou've supplied the wrong amount of arguments!"
     cant_message: "&eYou can't message that player"
-    msg_send: "&fTo ${NAME}: ${MSG}"
-    msg_receive: "&7From ${NAME}: ${MSG}"
+    bad_sender: "&cThis sender cannot do that"
+    msg_send: "&fTo {playername}: {message}"
+    msg_receive: "&7From {playername}: {message}"

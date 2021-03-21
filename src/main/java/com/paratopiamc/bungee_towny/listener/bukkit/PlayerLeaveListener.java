@@ -20,7 +20,7 @@ public class PlayerLeaveListener implements Listener {
 
         if (Listeners.isUsingTowny()) {
             Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-            try {
+            if (resident.hasTitle()) {
                 String title = resident.getTitle();
 
                 new SQLMessage(SQLHost.getCredentials()).executeSQL(
@@ -28,7 +28,6 @@ public class PlayerLeaveListener implements Listener {
                                 "    SET title = '" + title + "'" +
                                 "WHERE uuid ='" + uuid + "';"
                 );
-            } catch (Exception e) {
             }
         }
     }

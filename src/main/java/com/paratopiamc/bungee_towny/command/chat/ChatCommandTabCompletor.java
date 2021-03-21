@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.chat.command;
+package com.paratopiamc.bungee_towny.command.chat;
 
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import org.bukkit.command.Command;
@@ -22,6 +22,10 @@ public class ChatCommandTabCompletor implements TabCompleter {
         if (args.length == 1) {
 
             for (Channel channel : channels.values()) {
+                if (channel.getName().equals("msg")) {
+                    continue;
+                }
+
                 if (sender.hasPermission(channel.getPermission())) {
                     results.add(channel.getName());
                 }

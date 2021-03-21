@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.listener.Listeners;
+import com.paratopiamc.bungee_towny.synced.Bungeecord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -14,6 +15,8 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 
@@ -51,11 +54,9 @@ public class BungeeMessageListener implements PluginMessageListener {
                 String server = in.readUTF(); // The name of the server you got the player list of
 
                 if (server.equals("ALL")) {
-                    String[] playerList = in.readUTF().split(", ");
+                    String[] players = in.readUTF().split(", ");
 
-                    for (String player : playerList) {
-                        BungeeTowny.getThisPlugin().getLogger().info(player);
-                    }
+                    Bungeecord.setPlayerList(players);
                 }
 
                 break;
@@ -95,6 +96,19 @@ public class BungeeMessageListener implements PluginMessageListener {
 
                         break;
                     }
+                    case "message": {
+                        String recipient = jsonObject.get("recipient").getAsString();
+                        String message = jsonObject.get("message").getAsString();
+
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            if (player.getName().equalsIgnoreCase(recipient)) {
+                                player.sendMessage(message);
+                            }
+                        }
+
+                        break;
+                    }
+
                     case "check_queue": {
                         //TODO check mysql queue for actions
                         break;

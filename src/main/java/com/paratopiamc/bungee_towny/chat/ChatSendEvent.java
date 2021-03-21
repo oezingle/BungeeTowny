@@ -99,7 +99,6 @@ public class ChatSendEvent extends Event {
 
             //set the message from the format
             String chatMessage = format
-                    .replace("{playername}", player.getName())
                     .replace("{modplayername}", player.getDisplayName())
                     .replace("{worldname}", ChatFormats.getWorld().replace("%s", player.getWorld().getName()))
                     .replace("{town}", town)
@@ -114,6 +113,14 @@ public class ChatSendEvent extends Event {
                     .replace("{townytagoverride}", bothformatted)
                     .replace("{townyformatted}", bothformatted)
                     .replace("{servername}", ChatFormats.getWorld().replace("%s", BungeeTowny.getServerName()));
+
+            switch (channel.getType()) {
+                case MESSAGE:
+                    break;
+                default:
+                    chatMessage = chatMessage.replace("{playername}", player.getName());
+                    break;
+            }
 
             //replace all the towny tags, but if we can't find them just strip em out
             if (Listeners.isUsingTowny()) {
@@ -157,7 +164,7 @@ public class ChatSendEvent extends Event {
             //do the message last so everything else can be color coded
             chatMessage = chatMessage
                     .replace("{msg}", playerMessage)
-                    .replace("  "," ");
+                    .replace("  ", " ");
 
             //TODO consider range
             //TODO consider spying
@@ -188,7 +195,41 @@ public class ChatSendEvent extends Event {
                             simpleSend(Towns.getAllNames(), chatMessage);
                         }
                         break;
-                    default:
+                    case MESSAGE: {
+
+                        String sendTo = Players.getChannel(uuid).replace("msg|", "");
+
+                        Player sendToPlayer = null;
+                        for (Player candidate : Bukkit.getOnlinePlayers()) {
+                            if (candidate.getName().equalsIgnoreCase(sendTo))
+                                sendToPlayer = candidate;
+                        }
+
+                        player.sendMessage(chatMessage
+                                .replace("{fromto}", "To")
+                                .replace("{playername}", sendTo));
+
+                        String fromMessage = chatMessage
+                                .replace("{fromto}", "From")
+                                .replace("{playername}", player.getName());
+
+                        if (sendToPlayer != null) {
+                            player.sendMessage(fromMessage);
+                        } else {
+                            Plugin plugin = Listeners.getPlugin();
+
+                            BungeeMessage messages = new BungeeMessage(plugin);
+
+                            messages.sendPluginMessage(
+                                    "{" +
+                                            "   \"command\":\"message\"," +
+                                            "   \"recipient\":\"" + sendTo + "\"," +
+                                            "   \"message\":\"" + fromMessage + "\"" +
+                                            "}");
+                        }
+                        break;
+                    }
+                    default: {
                         //send a plugin message to the other servers, because we have to check permissions with these
                         Plugin plugin = Listeners.getPlugin();
 
@@ -197,10 +238,10 @@ public class ChatSendEvent extends Event {
                         BungeeMessage messages = new BungeeMessage(plugin);
                         messages.sendPluginMessage(
                                 "{" +
-                                "   \"command\":\"permission_chat\"," +
-                                "   \"permission\":\"" + permission + "\"," +
-                                "   \"message\":\"" + chatMessage + "\"" +
-                                "}");
+                                        "   \"command\":\"permission_chat\"," +
+                                        "   \"permission\":\"" + permission + "\"," +
+                                        "   \"message\":\"" + chatMessage + "\"" +
+                                        "}");
 
                         //do it locally
                         for (Player candidate : Bukkit.getOnlinePlayers()) {
@@ -211,6 +252,7 @@ public class ChatSendEvent extends Event {
                         }
 
                         break;
+                    }
                 }
 
             } else {

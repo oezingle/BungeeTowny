@@ -5,16 +5,11 @@ import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessageListener;
 import com.paratopiamc.bungee_towny.chat.Channels;
 import com.paratopiamc.bungee_towny.chat.ChatColors;
 import com.paratopiamc.bungee_towny.chat.ChatFormats;
-import com.paratopiamc.bungee_towny.chat.command.ChatAliasExecutor;
 import com.paratopiamc.bungee_towny.command.AdminCommandExecutor;
 import com.paratopiamc.bungee_towny.command.AdminCommandTabCompletor;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,8 +20,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -43,6 +36,7 @@ public final class BungeeTowny extends JavaPlugin {
     static File server_uuid_yml;
 
     public static BukkitTask waitForBungeePlayer;
+    private static BukkitTask getPlayerList;
 
     private static JavaPlugin thisPlugin;
 
@@ -76,7 +70,6 @@ public final class BungeeTowny extends JavaPlugin {
         waitForBungeePlayer = new BukkitRunnable() {
             @Override
             public void run() {
-                //TODO repeat until a player can send the bungeemessage
                 //load in bungeeMessage
                 //Tx
                 getServer().getMessenger().registerOutgoingPluginChannel(thisPlugin, "BungeeCord");
@@ -90,6 +83,14 @@ public final class BungeeTowny extends JavaPlugin {
                 bungeeMessager.send();
             }
         }.runTaskTimer(this, 20, 40); //2 second timeframe
+
+        getPlayerList = new BukkitRunnable() {
+            @Override
+            public void run() {
+                bungeeMessager.writeStrings(new String[]{"PlayerList","ALL"});
+                bungeeMessager.send();
+            }
+        }.runTaskTimer(this, 20, 20 * 15); //15 s timeframe
 
         //Bstats lmao
         int pluginId = 10724;
@@ -110,6 +111,10 @@ public final class BungeeTowny extends JavaPlugin {
         //remove commands
         getLogger().info("Removing commands..");
         Channels.unRegisterChannels();
+
+        getLogger().info("Cancelling tasks..");
+        waitForBungeePlayer.cancel();
+        getPlayerList.cancel();
 
         getLogger().info("BungeeTowny Disabled");
     }
@@ -244,6 +249,8 @@ public final class BungeeTowny extends JavaPlugin {
     }
 
     public static void reloadChat() {
+        reloadMessages();
+
         //figure out if chat features are enabled, and do the thing!
         //chat/<file>
         if (thisPlugin.getConfig().getBoolean("chat")) {
@@ -291,24 +298,22 @@ public final class BungeeTowny extends JavaPlugin {
             }
 
             newChatSettingsFile = new File(thisPlugin.getDataFolder(), "chat/BungeeTowny.yml");
-            FileConfiguration newChatConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
+            FileConfiguration newChatConfig = YamlConfiguration.loadConfiguration(newChatSettingsFile);
 
             SQLHost.set_config("newChatSettings", newChatSettingsFile);
 
             //get the channels as commands
             ConfigurationSection channels = channelConfig.getConfigurationSection("Channels");
 
-            Channels.init(thisPlugin, channels, chatConfig);
+            Channels.init(thisPlugin, channels, chatConfig, newChatConfig);
         }
-
-        reloadMessages();
     }
 
     public static Plugin getThisPlugin() {
         return thisPlugin;
     }
 
-    public static JavaPlugin getJavaPlugin() {
+    /*public static JavaPlugin getJavaPlugin() {
         return thisPlugin;
-    }
+    }*/
 }

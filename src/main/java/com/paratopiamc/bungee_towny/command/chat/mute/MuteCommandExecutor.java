@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.chat.command;
+package com.paratopiamc.bungee_towny.command.chat.mute;
 
 import com.paratopiamc.bungee_towny.Translation;
 import com.paratopiamc.bungee_towny.synced.Players;
@@ -8,7 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class UnmuteCommandExecutor implements CommandExecutor {
+public class MuteCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
 
         if (args.length < 1 || args.length > 1) {
@@ -23,17 +23,17 @@ public class UnmuteCommandExecutor implements CommandExecutor {
                 String uuid = player.getUniqueId().toString();
                 String name = player.getName();
 
-                if (! Players.isMuted(uuid)) {
-                    sender.sendMessage(Translation.of("chat.admin.already_unmuted"));
+                if (Players.isMuted(uuid)) {
+                    sender.sendMessage(Translation.of("chat.admin.already_muted"));
                     return true;
                 } else {
-                    sender.sendMessage(Translation.of("chat.admin.unmute_success").replace("{playername}",name));
-                    Players.setMuted(uuid, false);
+                    sender.sendMessage(Translation.of("chat.admin.mute_success").replace("{playername}",name));
+                    Players.setMuted(uuid, true);
                 }
 
                 //notify them
                 //TODO check for chat/BungeeTowny.yml > mute.notify
-                player.sendMessage(Translation.of("chat.unmuted"));
+                player.sendMessage(Translation.of("chat.muted"));
 
                 //return true
                 return true;

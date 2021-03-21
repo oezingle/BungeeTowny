@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.chat.command;
+package com.paratopiamc.bungee_towny.command.chat;
 
 import com.paratopiamc.bungee_towny.Translation;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
@@ -41,6 +41,10 @@ public class ChatCommandExecutor implements CommandExecutor {
             return true;
         } else {
             for (Channel channel : channels.values()) {
+                if (channel.getName().equals("msg")) {
+                    continue;
+                }
+
                 if (args[0].equalsIgnoreCase(channel.getName()) && sender.hasPermission(channel.getPermission())) {
                     if (channel.getName().equals("town") && Players.getTown(uuid).equalsIgnoreCase("townless")) {
                         sender.sendMessage(no_town);

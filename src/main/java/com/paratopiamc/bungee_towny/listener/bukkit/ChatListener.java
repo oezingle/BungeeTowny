@@ -28,6 +28,9 @@ public class ChatListener implements Listener {
             String uuid = player.getUniqueId().toString();
 
             String channelName = Players.getChannel(uuid);
+            if (channelName.contains("msg")) {
+                channelName = "msg";
+            }
 
             Channel channel = Channels.get(channelName);
 
@@ -37,8 +40,6 @@ public class ChatListener implements Listener {
 
             Bukkit.getPluginManager().callEvent(chatEvent);
         }
-
-        //event.setMessage("");
 
         event.setCancelled(true);
     }

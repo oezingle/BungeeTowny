@@ -11,14 +11,20 @@ public class AdminCommandTabCompletor implements TabCompleter {
 
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> results = new ArrayList<>();
-        if (args.length == 1) {
-            results.add("reload");
-            results.add("status");
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("reload")) {
-            results.add("chat");
-            results.add("messages");
-            results.add("sql");
-            results.add("server");
+        if (sender.hasPermission("bungeetowny.admin")) {
+            if (args.length == 1) {
+                if (sender.hasPermission("bungeetowny.admin.reload"))
+                    results.add("reload");
+                if (sender.hasPermission("bungeetowny.admin.status"))
+                    results.add("status");
+            } else if (args.length == 2 && args[0].equalsIgnoreCase("reload")) {
+                if (sender.hasPermission("bungeetowny.admin.reload")) {
+                    results.add("chat");
+                    results.add("messages");
+                    results.add("sql");
+                    results.add("server");
+                }
+            }
         }
 
         return results;

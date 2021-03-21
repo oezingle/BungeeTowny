@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.paratopiamc.bungee_towny.BungeeTowny;
-import com.paratopiamc.bungee_towny.chat.command.ChatAliasExecutor;
+import com.paratopiamc.bungee_towny.command.chat.ChatAliasExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.ConfigurationSection;
@@ -30,7 +30,11 @@ public class Channel {
 
         permission = config.getString("permission");
         type = ChannelType.fromString(config.getString("type"));
-        name = config.getName();
+        if (type != ChannelType.MESSAGE) {
+            name = config.getName();
+        } else {
+            name = "msg";
+        }
 
         commands = config.getStringList("commands");
 

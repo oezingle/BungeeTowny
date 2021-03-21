@@ -4,7 +4,8 @@ public enum ChannelType {
     GLOBAL,
     DEFAULT,
     NATION,
-    TOWN;
+    TOWN,
+    MESSAGE;
 
     public static ChannelType fromString(String name) {
         switch (name) {
@@ -14,6 +15,8 @@ public enum ChannelType {
                 return NATION;
             case "TOWN":
                 return TOWN;
+            case "MESSAGE":
+                return MESSAGE;
             default:
                 return DEFAULT;
         }

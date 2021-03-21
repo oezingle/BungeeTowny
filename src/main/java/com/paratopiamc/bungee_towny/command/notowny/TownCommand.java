@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.notowny;
+package com.paratopiamc.bungee_towny.command.notowny;
 
 import com.paratopiamc.bungee_towny.Translation;
 import org.bukkit.command.Command;

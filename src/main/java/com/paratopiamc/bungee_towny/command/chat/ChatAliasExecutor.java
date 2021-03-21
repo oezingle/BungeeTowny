@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.chat.command;
+package com.paratopiamc.bungee_towny.command.chat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -9,13 +9,13 @@ import java.util.List;
 
 public class ChatAliasExecutor extends BukkitCommand {
 
-    private String command;
+    //private String command;
     private String channel;
 
     public ChatAliasExecutor(String command, String channel) {
         super(command);
 
-        this.command = command;
+        //this.command = command;
         this.channel = channel;
     }
 

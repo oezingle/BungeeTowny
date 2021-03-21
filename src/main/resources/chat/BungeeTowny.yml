@@ -8,6 +8,15 @@ msg:
   #0 is no timeout
   #any other value is the timeout in minutes
   timeout: 0
+  #channel type and format, as seen in Channels.yml and ChatConfig.yml
+  channel:
+    commands: [ ]
+    type: MESSAGE
+    channeltag: '&f[&6MSG&f]'
+    messagecolour: '&7'
+    permission: 'towny.chat.message'
+    range: '-1'
+  format: '{channelTag} {fromto} {permprefix}{playername}{permsuffix}&f:{msgcolour} {msg}'
 
 mute:
   enabled: true
