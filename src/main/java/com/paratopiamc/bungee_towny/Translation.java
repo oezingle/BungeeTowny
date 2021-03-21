@@ -45,12 +45,18 @@ public abstract class Translation {
     public static void setFromConfig(ConfigurationSection config, String prefix) {
         config = config.getConfigurationSection(lang);
 
+        if (prefix != "" && !prefix.endsWith(".")) {
+            prefix = prefix + ".";
+        }
+
         //set the keys using the configurationSection
         Set<String> keys = config.getKeys(true);
         for (String key : keys) {
             String value = config.getString(key);
 
             setValue(prefix + key, value);
+
+            BungeeTowny.getThisPlugin().getLogger().info(prefix + key + " | " + value);
         }
     }
 

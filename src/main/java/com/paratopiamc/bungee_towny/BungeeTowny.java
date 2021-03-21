@@ -5,6 +5,7 @@ import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessageListener;
 import com.paratopiamc.bungee_towny.chat.Channels;
 import com.paratopiamc.bungee_towny.chat.ChatColors;
 import com.paratopiamc.bungee_towny.chat.ChatFormats;
+import com.paratopiamc.bungee_towny.command.AdminCommandExecutor;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.Bukkit;
@@ -86,6 +87,8 @@ public final class BungeeTowny extends JavaPlugin {
         int pluginId = 10724;
         Metrics metrics = new Metrics(this, pluginId);
 
+        getCommand("bungeetowny").setExecutor(new AdminCommandExecutor());
+
         getLogger().info("BungeeTown Enabled!");
     }
 
@@ -138,19 +141,11 @@ public final class BungeeTowny extends JavaPlugin {
         }
     }
 
-    //logger for other classes
-    public void mainLogger(String msg) {
-        getLogger().info(msg);
-    }
-
     static void update_server_listing() {
-        //not required because of the other servers
-        //Servers.set_uuid(serverUUID, serverName);
         SQLHost.set_server(serverUUID, serverName, Listeners.isUsingTowny());
-
     }
 
-    static void reload() {
+    public static void reload() {
 
         //vanilla config file
         thisPlugin.saveDefaultConfig();
@@ -162,6 +157,60 @@ public final class BungeeTowny extends JavaPlugin {
         }
         thisPlugin.getLogger().info("Using language " + lang);
 
+        reloadSQL();
+
+        reloadServer();
+
+        reloadChat();
+
+        //TODO sync configs
+
+        Listeners.reload();
+    }
+
+    public static void reloadMessages() {
+        //chat/<file>
+        if (thisPlugin.getConfig().getBoolean("chat")) {
+            //messages ==================================================================================
+            File messageFile = new File(thisPlugin.getDataFolder(), "chat/Messages.yml");
+            if (!messageFile.exists()) {
+                thisPlugin.saveResource("chat/Messages.yml", false);
+            }
+
+            messageFile = new File(thisPlugin.getDataFolder(), "chat/Messages.yml");
+            FileConfiguration messageConfig = YamlConfiguration.loadConfiguration(messageFile);
+
+            Translation.setFromConfig(messageConfig, "chat");
+
+            SQLHost.set_config("chatMessages", messageFile);
+        }
+
+        //global
+        //Messages ===================================================================
+        File messageFile = new File(thisPlugin.getDataFolder(), "Messages.yml");
+        if (!messageFile.exists()) {
+            thisPlugin.saveResource("Messages.yml", false);
+        }
+
+        messageFile = new File(thisPlugin.getDataFolder(), "Messages.yml");
+        FileConfiguration messageConfig = YamlConfiguration.loadConfiguration(messageFile);
+
+        Translation.setFromConfig(messageConfig, "towny");
+
+    }
+
+    public static void reloadSQL() {
+        //SQL
+        File sqlfile = new File(thisPlugin.getDataFolder(), "mysql.yml");
+        if (!sqlfile.exists()) {
+            thisPlugin.saveResource("mysql.yml", false);
+        }
+        FileConfiguration sqlconfig = YamlConfiguration.loadConfiguration(sqlfile);
+
+        SQLHost.init(sqlconfig.getConfigurationSection(""));
+    }
+
+    public static void reloadServer() {
         //server UUID file
         server_uuid_yml = new File(thisPlugin.getDataFolder(), "server_uuid.yml");
         FileConfiguration server_uuid_config = YamlConfiguration.loadConfiguration(server_uuid_yml);
@@ -181,21 +230,14 @@ public final class BungeeTowny extends JavaPlugin {
             serverName = server_uuid_config.getString("this_server.name");
         }
 
-        //SQL
-        File sqlfile = new File(thisPlugin.getDataFolder(), "mysql.yml");
-        if (!sqlfile.exists()) {
-            thisPlugin.saveResource("mysql.yml", false);
-        }
-        FileConfiguration sqlconfig = YamlConfiguration.loadConfiguration(sqlfile);
-
-        SQLHost.init(sqlconfig.getConfigurationSection(""));
-
-        //basic loading is done
         thisPlugin.getLogger().info("This server's UUID is " + serverUUID + " " + (loaded_uuid ? "(from file" : "(newly generated)"));
         thisPlugin.getLogger().info("This server's name is " + serverName);
         update_server_listing();
+    }
 
+    public static void reloadChat() {
         //figure out if chat features are enabled, and do the thing!
+        //chat/<file>
         if (thisPlugin.getConfig().getBoolean("chat")) {
             Listeners.usingChat(true);
 
@@ -234,19 +276,6 @@ public final class BungeeTowny extends JavaPlugin {
 
             SQLHost.set_config("chatConfig", chatConfigFile);
 
-            //messages ==================================================================================
-            File messageFile = new File(thisPlugin.getDataFolder(), "chat/Messages.yml");
-            if (!messageFile.exists()) {
-                thisPlugin.saveResource("chat/Messages.yml", false);
-            }
-
-            messageFile = new File(thisPlugin.getDataFolder(), "chat/Messages.yml");
-            FileConfiguration messageConfig = YamlConfiguration.loadConfiguration(messageFile);
-
-            Translation.setFromConfig(messageConfig, "chat.");
-
-            SQLHost.set_config("chatMessages", messageFile);
-
             //BungeeTowny ================================================================================
             File newChatSettingsFile = new File(thisPlugin.getDataFolder(), "chat/BungeeTowny.yml");
             if (!newChatSettingsFile.exists()) {
@@ -264,20 +293,7 @@ public final class BungeeTowny extends JavaPlugin {
             Channels.init(thisPlugin, channels, chatConfig);
         }
 
-        //Messages ===================================================================
-        File messageFile = new File(thisPlugin.getDataFolder(), "Messages.yml");
-        if (!messageFile.exists()) {
-            thisPlugin.saveResource("Messages.yml", false);
-        }
-
-        messageFile = new File(thisPlugin.getDataFolder(), "Messages.yml");
-        FileConfiguration messageConfig = YamlConfiguration.loadConfiguration(messageFile);
-
-        Translation.setFromConfig(messageConfig, "towny");
-
-        //TODO sync configs
-
-        Listeners.reload();
+        reloadMessages();
     }
 
     public static Plugin getThisPlugin() {

@@ -24,6 +24,10 @@ commands:
     usage: Syntax error. Use /<command>
     description: a stand-in for towny's /t and /town command
     aliases: [t]
+  bungeetowny:
+    permission: bungeetowny.admin
+    usage: Syntax error. Use /<command>
+    description: the administrative command
 
 permissions:
   bungeetowny.chat:
@@ -31,6 +35,12 @@ permissions:
     description: allows use of /chat
   bungeetowny.mute:
     description: allows staff to /mute and /unmute
+  bungeetowny.admin:
+    description: admin parent node
+    children:
+      - bungeetowny.admin.reload
+  bungeetowny.admin.reload:
+    description: allows the /bungeetowny reload command
   bungeetowny.town:
     default: true
     description: allows using /town [arg] if towny isn't present on the server

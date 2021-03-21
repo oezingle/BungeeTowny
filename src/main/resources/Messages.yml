@@ -1,5 +1,16 @@
 en:
   command:
     not_found: "&cThat command can't be used here!"
+    admin:
+      help:
+        row1: "&6.oOo.&e_____________&6/bungeetowny&e_____________&6.oOo."
+        row2: "/bungeetowny reload [module]"
+        row3: "/bungeetowny status"
+        row4: ""
+      unknown_arg: "&cUnknown argument!"
+      reload_success: "&aSuccessfully reloaded {module}"
+      using_plugin: "&aUsing {plugin}"
+      not_using_plugin: "&eNot using {plugin}"
+      not_using_dependency: "&cNot using {plugin}"
   join: "&6{playername}&b joined the town!"
   leave: "&b{playername} left the town"
