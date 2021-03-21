@@ -6,6 +6,8 @@ import com.paratopiamc.bungee_towny.sql.SQLMessage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Players {
     public static String getTown(String uuid) {
@@ -75,6 +77,37 @@ public abstract class Players {
         }
 
         return "general";
+    }
+
+    public static String getUUID(String name) {
+        try {
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT uuid FROM players WHERE name  = '" + name + "';");
+
+            if (results.next()) {
+                return results.getString("uuid");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static List<String> ignoringNames(String uuid) {
+        //SELECT * FROM items WHERE items.xml LIKE '%123456%'
+        try {
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players WHERE ignored_by LIKE '" + uuid +"'");
+
+            List<String> names = new ArrayList<>();
+            while (results.next()) {
+                names.add(results.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
     }
 
     public static boolean isMuted(String uuid) {

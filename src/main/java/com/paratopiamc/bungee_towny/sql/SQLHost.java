@@ -35,6 +35,7 @@ public abstract class SQLHost {
         table_info = new HashMap<>();
         table_info.put("uuid", "VARCHAR(36) NOT NULL");
         table_info.put("name", "VARCHAR(16) NOT NULL");
+        table_info.put("ignored_by", "TEXT NOT NULL DEFAULT ''");
         table_info.put("town", "VARCHAR(36) DEFAULT null");
         table_info.put("channel", "VARCHAR(36) NOT NULL DEFAULT 'general'");
         table_info.put("nation", "VARCHAR(36) DEFAULT null");

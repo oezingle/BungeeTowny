@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.listener.Listeners;
-import com.paratopiamc.bungee_towny.synced.Bungeecord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -15,8 +14,6 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
 
@@ -37,6 +34,8 @@ public class BungeeMessageListener implements PluginMessageListener {
         ByteArrayDataInput in = ByteStreams.newDataInput(byteMessage);
         String subchannel = in.readUTF();
 
+        Listeners.usingBungee(true);
+
         switch (subchannel) {
             case "GetServer":
                 BungeeTowny.waitForBungeePlayer.cancel();
@@ -46,8 +45,6 @@ public class BungeeMessageListener implements PluginMessageListener {
                 if (serverName != null) {
                     BungeeTowny.setServerName(serverName);
                 }
-                Listeners.usingBungee(true);
-
                 break;
             case "PlayerList":
 

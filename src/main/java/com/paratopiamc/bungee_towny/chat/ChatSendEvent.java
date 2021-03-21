@@ -175,7 +175,6 @@ public class ChatSendEvent extends Event {
             //TODO essentials mute, essentials ignore
 
             if (Listeners.isUsingBungee()) {
-
                 //use the mysql db to figure out recipients
                 switch (channel.getType()) {
                     case TOWN:
@@ -262,7 +261,7 @@ public class ChatSendEvent extends Event {
             } else {
                 String bad_config = Translation.of("chat.bad_config");
                 player.sendMessage(bad_config);
-                Bukkit.getPluginManager().getPlugin("BungeeTowny").getLogger().info(bad_config);
+                Bukkit.getPluginManager().getPlugin("BungeeTowny").getLogger().info(bad_config + " | You need bungeecord for this plugin to work");
             }
         } else {
             player.sendMessage(Translation.of("chat.null_channel"));

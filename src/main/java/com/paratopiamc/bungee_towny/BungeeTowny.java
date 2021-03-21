@@ -7,6 +7,8 @@ import com.paratopiamc.bungee_towny.chat.ChatColors;
 import com.paratopiamc.bungee_towny.chat.ChatFormats;
 import com.paratopiamc.bungee_towny.command.AdminCommandExecutor;
 import com.paratopiamc.bungee_towny.command.AdminCommandTabCompletor;
+import com.paratopiamc.bungee_towny.command.chat.IgnoreCommandExecutor;
+import com.paratopiamc.bungee_towny.command.chat.msg.MsgCommandTabCompletor;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.Bukkit;
@@ -87,7 +89,7 @@ public final class BungeeTowny extends JavaPlugin {
         getPlayerList = new BukkitRunnable() {
             @Override
             public void run() {
-                bungeeMessager.writeStrings(new String[]{"PlayerList","ALL"});
+                bungeeMessager.writeStrings(new String[]{"PlayerList", "ALL"});
                 bungeeMessager.send();
             }
         }.runTaskTimer(this, 20, 20 * 15); //15 s timeframe
@@ -113,13 +115,26 @@ public final class BungeeTowny extends JavaPlugin {
         Channels.unRegisterChannels();
 
         getLogger().info("Cancelling tasks..");
-        waitForBungeePlayer.cancel();
-        getPlayerList.cancel();
+        try {
+            waitForBungeePlayer.cancel();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getPlayerList.cancel();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         getLogger().info("BungeeTowny Disabled");
     }
 
     public static void setServerName(String name) {
+
+        if (serverName == null) {
+            return;
+        }
+
         if (!serverName.equalsIgnoreCase(name)) {
             getThisPlugin().getLogger().info("The server's name has been changed to " + name);
 
@@ -245,7 +260,7 @@ public final class BungeeTowny extends JavaPlugin {
             serverName = server_uuid_config.getString("this_server.name");
         }
 
-        thisPlugin.getLogger().info("This server's UUID is " + serverUUID + " " + (loaded_uuid ? "(from file" : "(newly generated)"));
+        thisPlugin.getLogger().info("This server's UUID is " + serverUUID + " " + (loaded_uuid ? "(from file)" : "(newly generated)"));
         thisPlugin.getLogger().info("This server's name is " + serverName);
         update_server_listing();
     }
@@ -309,6 +324,10 @@ public final class BungeeTowny extends JavaPlugin {
             ConfigurationSection channels = channelConfig.getConfigurationSection("Channels");
 
             Channels.init(thisPlugin, channels, chatConfig, newChatConfig);
+
+            thisPlugin.getCommand("ignore").setExecutor(new IgnoreCommandExecutor());
+            thisPlugin.getCommand("ignore").setTabCompleter(new MsgCommandTabCompletor());
+
         } else {
             Listeners.usingChat(false);
 

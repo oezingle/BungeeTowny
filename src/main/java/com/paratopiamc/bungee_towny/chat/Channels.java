@@ -3,8 +3,8 @@ package com.paratopiamc.bungee_towny.chat;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
 
-import com.paratopiamc.bungee_towny.command.chat.ChatCommandExecutor;
-import com.paratopiamc.bungee_towny.command.chat.ChatCommandTabCompletor;
+import com.paratopiamc.bungee_towny.command.chat.channel.ChatCommandExecutor;
+import com.paratopiamc.bungee_towny.command.chat.channel.ChatCommandTabCompletor;
 import com.paratopiamc.bungee_towny.command.chat.msg.MsgCommandExecutor;
 import com.paratopiamc.bungee_towny.command.chat.msg.MsgCommandTabCompletor;
 import com.paratopiamc.bungee_towny.command.chat.mute.MuteCommandExecutor;

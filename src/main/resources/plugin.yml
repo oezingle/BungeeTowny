@@ -12,11 +12,11 @@ commands:
     usage: Syntax error. Use /<command> <channel>
     description: the command to change channels. All other channel commands are ailases
   mute:
-    permission: bungeetowny.mute
+    permission: bungeetowny.chat.mute
     usage: Syntax error. Use /<command> <player>
     description: a command to mute players across BungeeTowny's chat
   unmute:
-    permission: bungeetowny.mute
+    permission: bungeetowny.chat.mute
     usage: Syntax error. Use /<command> <player>
     description: a command to unmute players across BungeeTowny's chat
   town:
@@ -31,6 +31,11 @@ commands:
     usage: Syntax error. Use /<command>
     description: similar to vanilla msg, but players can toggle and send messages across the network
     permission: bungeetowny.chat.msg
+  ignore:
+    usage: Syntax error. Use /<command> <player>
+    description: allows players to ignore each other's chat messages
+    permission: bungeetowny.chat.ignore
+    aliases: [unignore]
 
 permissions:
   bungeetowny.chat:
@@ -38,9 +43,12 @@ permissions:
     description: allows use of /chat
     children:
       - bungeetowny.chat.msg
+      - bungeetowny.chat.ignore
   bungeetowny.chat.msg:
     description: allows use of /msg <name> across the bungeetowny network
-  bungeetowny.mute:
+  bungeetowny.chat.ignore:
+    description: allows use of /ignore <name> across the bungeetowny network
+  bungeetowny.chat.mute:
     description: allows staff to /mute and /unmute
   bungeetowny.admin:
     description: admin parent node
