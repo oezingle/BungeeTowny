@@ -1,6 +1,5 @@
 package com.paratopiamc.bungee_towny.sql;
 
-//import com.mysql.jdbc.Connection;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import org.bukkit.Bukkit;
 
@@ -9,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
 
 /*
 Much of this code is stolen verbatim from
@@ -20,6 +20,8 @@ public class SQLMessage {
     public static String host, port, database, username, password;
 
     static Connection connection;
+
+    private static boolean isEnabled = false;
 
     public static HashMap<String, Set<String>> tables;
 
@@ -45,14 +47,14 @@ public class SQLMessage {
             //with the method getConnection() from DriverManager, we're trying to set
             //the connection's url, username, password to the variables we made earlier and
             //trying to get a connection at the same time. JDBC allows us to do this.
+            isEnabled = true;
         } catch (SQLException e) { //catching errors)
             //e.printStackTrace(); //prints out SQLException errors to the console (if any)
-            System.err.println("=============================================");
-            System.err.println("BungeePVP cannot connect to the MySQL server!");
-            System.err.println("=============================================");
+            Bukkit.getLogger().log(Level.SEVERE,"=============================================");
+            Bukkit.getLogger().log(Level.SEVERE,"BungeePVP cannot connect to the MySQL server!");
+            Bukkit.getLogger().log(Level.SEVERE,"=============================================");
 
-            //Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("BungeeTowny"));
-            Bukkit.getPluginManager().disablePlugin(BungeeTowny.getProvidingPlugin(this.getClass()));
+            isEnabled = false;
         }
     }
 
@@ -137,8 +139,12 @@ public class SQLMessage {
 
     public void executeSQL(String sql) {
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.executeUpdate();
+            if (isEnabled) {
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                stmt.executeUpdate();
+            } else {
+                BungeeTowny.getThisPlugin().getLogger().log(Level.SEVERE, "An SQL message could not be sent!");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -146,10 +152,14 @@ public class SQLMessage {
 
     public ResultSet executeSelectSQL(String sql) {
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            ResultSet results = stmt.executeQuery();
+            if (isEnabled) {
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                ResultSet results = stmt.executeQuery();
 
-            return results;
+                return results;
+            } else {
+                BungeeTowny.getThisPlugin().getLogger().log(Level.SEVERE, "An SQL message could not be sent!");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

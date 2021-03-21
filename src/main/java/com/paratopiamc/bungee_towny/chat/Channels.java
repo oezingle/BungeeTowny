@@ -2,10 +2,10 @@ package com.paratopiamc.bungee_towny.chat;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
-import com.paratopiamc.bungee_towny.chat.chatcommand.ChatCommandExecutor;
-import com.paratopiamc.bungee_towny.chat.chatcommand.ChatCommandTabCompletor;
-import com.paratopiamc.bungee_towny.chat.mutecommand.MuteCommandExecutor;
-import com.paratopiamc.bungee_towny.chat.mutecommand.UnmuteCommandExecutor;
+import com.paratopiamc.bungee_towny.chat.command.ChatCommandExecutor;
+import com.paratopiamc.bungee_towny.chat.command.ChatCommandTabCompletor;
+import com.paratopiamc.bungee_towny.chat.command.MuteCommandExecutor;
+import com.paratopiamc.bungee_towny.chat.command.UnmuteCommandExecutor;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;

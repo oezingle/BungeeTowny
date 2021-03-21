@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.chat.chatcommand;
+package com.paratopiamc.bungee_towny.chat.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

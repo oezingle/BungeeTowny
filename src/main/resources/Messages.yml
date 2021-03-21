@@ -1,3 +1,5 @@
 en:
   command:
     not_found: "&cThat command can't be used here!"
+  join: "&6{playername}&b joined the town!"
+  leave: "&b{playername} left the town"

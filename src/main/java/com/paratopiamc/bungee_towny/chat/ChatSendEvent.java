@@ -13,6 +13,7 @@ import com.paratopiamc.bungee_towny.synced.Nations;
 import com.paratopiamc.bungee_towny.synced.Players;
 import com.paratopiamc.bungee_towny.synced.Towns;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -154,7 +155,9 @@ public class ChatSendEvent extends Event {
             chatMessage = replaceColors(chatMessage);
 
             //do the message last so everything else can be color coded
-            chatMessage = chatMessage.replace("{msg}", playerMessage);
+            chatMessage = chatMessage
+                    .replace("{msg}", playerMessage)
+                    .replace("  "," ");
 
             //TODO consider range
             //TODO consider spying

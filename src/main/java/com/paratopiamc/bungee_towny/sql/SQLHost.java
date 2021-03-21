@@ -71,6 +71,7 @@ public abstract class SQLHost {
         //queue - server_uuid | action
         table_info = new HashMap<>();
         table_info.put("server_uuid", "VARCHAR(36) NOT NULL");
+        table_info.put("type", "VARCHAR(10) NOT NULL");
         table_info.put("action", "JSON");
         messenger.createTable("action_queue", table_info);
 

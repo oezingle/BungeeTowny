@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.paratopiamc.bungee_towny.BungeeTowny;
-import com.paratopiamc.bungee_towny.chat.chatcommand.ChatAliasExecutor;
+import com.paratopiamc.bungee_towny.chat.command.ChatAliasExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.ConfigurationSection;

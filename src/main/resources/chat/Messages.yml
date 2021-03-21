@@ -1,11 +1,11 @@
 en:
   no_town: "&cYou're not in a town"
   no_nation: "&cYou're not in a nation"
-  channel_switch: "&fChannel set to &a${CHANNEL}"
+  channel_switch: "&fChannel set to &a{channel}"
   not_a_channel: "&eThat channel does not exist!"
   null_channel: "&eYour message could not be sent"
   bad_config: "&cYour admin did not set up the chat correctly. Please report this error"
-  current_channel: "&fYou're speaking in the &a${CHANNEL}&f channel"
+  current_channel: "&fYou're speaking in the &a{channel}&f channel"
   muted: "&cYou cannnot send chat messages as you are muted"
   unmuted: "&aYou have been unmuted"
   bad_args: "&cWrong amount of arguments!"
@@ -13,8 +13,8 @@ en:
     player_not_found: "&cThat player could not be found!"
     already_muted: "&eThat player is already muted"
     already_unmuted: "&eThat player is already not muted"
-    mute_success: "&aMuted ${NAME}"
-    unmute_success: "&aUnmuted ${NAME}"
+    mute_success: "&aMuted {playername}"
+    unmute_success: "&aUnmuted {playername}"
   #Depends on the msg.enabled Chat/BungeeTowny.yml
   msg:
     convo_expired: "&fThe conversation you were in has expired"

@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.chat.mutecommand;
+package com.paratopiamc.bungee_towny.chat.command;
 
 import com.paratopiamc.bungee_towny.Translation;
 import com.paratopiamc.bungee_towny.synced.Players;
@@ -27,7 +27,7 @@ public class UnmuteCommandExecutor implements CommandExecutor {
                     sender.sendMessage(Translation.of("chat.admin.already_unmuted"));
                     return true;
                 } else {
-                    sender.sendMessage(Translation.of("chat.admin.unmute_success").replace("${NAME}",name));
+                    sender.sendMessage(Translation.of("chat.admin.unmute_success").replace("{playername}",name));
                     Players.setMuted(uuid, false);
                 }
 
