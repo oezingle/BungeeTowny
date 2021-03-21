@@ -54,9 +54,9 @@ public class BungeeMessageListener implements PluginMessageListener {
                 String server = in.readUTF(); // The name of the server you got the player list of
 
                 if (server.equals("ALL")) {
-                    String[] players = in.readUTF().split(", ");
+                    String input = in.readUTF();
 
-                    Bungeecord.setPlayerList(players);
+                    String[] players = input.split(", ");
                 }
 
                 break;

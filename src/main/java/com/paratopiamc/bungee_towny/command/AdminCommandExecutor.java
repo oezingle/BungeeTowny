@@ -2,6 +2,7 @@ package com.paratopiamc.bungee_towny.command;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.Translation;
+import com.paratopiamc.bungee_towny.chat.Channels;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.command.Command;
@@ -35,6 +36,7 @@ public class AdminCommandExecutor implements CommandExecutor {
                                 //reload <module>
                                 switch (args[1]) {
                                     case "chat":
+                                        Channels.unRegisterChannels();
                                         BungeeTowny.reloadChat();
                                         sender.sendMessage(Translation.of("towny.command.admin.reload_success").replace("{module}", "chat"));
                                         return true;

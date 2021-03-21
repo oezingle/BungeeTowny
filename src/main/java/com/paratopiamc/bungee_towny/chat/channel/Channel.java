@@ -5,8 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.command.chat.ChatAliasExecutor;
+import com.paratopiamc.bungee_towny.command.chat.msg.MsgCommandAlias;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.lang.reflect.Field;
@@ -20,7 +22,7 @@ public class Channel {
     private String name;
     private String format;
     private List<String> commands;
-    private List<ChatAliasExecutor> executors;
+    private List<BukkitCommand> executors;
 
     private int range;
 
@@ -43,7 +45,7 @@ public class Channel {
         executors = new ArrayList<>();
 
         for (String command : commands) {
-            registerChannelCommand(command);
+            registerAliasCommand(command);
         }
 
         String channeltag = config.getString("channeltag");
@@ -84,16 +86,22 @@ public class Channel {
         return isJSON;
     }
 
-    boolean registerChannelCommand(String command) {
+    boolean registerAliasCommand(String command) {
         try {
             final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 
             bukkitCommandMap.setAccessible(true);
             CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
 
-            ChatAliasExecutor executor =  new ChatAliasExecutor(command, name);
-
+            BukkitCommand executor;
+            if (type == ChannelType.MESSAGE) {
+                executor = new MsgCommandAlias(command);
+            } else {
+                executor = new ChatAliasExecutor(command, name);
+            }
             commandMap.register("bungeetowny", executor);
+
+            executors.add(executor);
 
             return true;
         } catch (Exception e) {
@@ -113,7 +121,7 @@ public class Channel {
 
     public void unRegister() {
         try {
-            for (ChatAliasExecutor executor : executors) {
+            for (BukkitCommand executor : executors) {
                 final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
                 bukkitCommandMap.setAccessible(true);
 
