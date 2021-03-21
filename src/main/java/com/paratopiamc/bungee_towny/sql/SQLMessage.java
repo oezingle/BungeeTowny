@@ -58,6 +58,10 @@ public class SQLMessage {
         }
     }
 
+    public boolean isConnected() {
+        return isEnabled;
+    }
+
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) { //checking if connection isn't null to

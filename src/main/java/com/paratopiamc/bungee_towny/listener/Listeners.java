@@ -101,6 +101,10 @@ public abstract class Listeners {
         return usingBungee;
     }
 
+    public static boolean isUsingChat() {
+        return usingChat;
+    }
+
     public static boolean isUsingPAPI() {
         return usingPAPI;
     }

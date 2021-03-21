@@ -56,7 +56,7 @@ public abstract class Translation {
 
             setValue(prefix + key, value);
 
-            BungeeTowny.getThisPlugin().getLogger().info(prefix + key + " | " + value);
+            //BungeeTowny.getThisPlugin().getLogger().info(prefix + key + " | " + value);
         }
     }
 

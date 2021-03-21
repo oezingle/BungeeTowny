@@ -3,6 +3,7 @@ package com.paratopiamc.bungee_towny.command;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.Translation;
 import com.paratopiamc.bungee_towny.listener.Listeners;
+import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,10 +12,10 @@ public class AdminCommandExecutor implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
         if (args.length == 0) {
+            sender.sendMessage(Translation.of("towny.command.admin.header").replace("{subcommand}",""));
             sender.sendMessage(Translation.of("towny.command.admin.help.row1"));
             sender.sendMessage(Translation.of("towny.command.admin.help.row2"));
-            sender.sendMessage(Translation.of("towny.command.admin.help.row3"));
-            sender.sendMessage(Translation.of("towny.command.admin.help.row4"));
+            sender.sendMessage(Translation.of("towny.command.admin.footer"));
 
             return true;
         } else {
@@ -52,23 +53,47 @@ public class AdminCommandExecutor implements CommandExecutor {
                         break;
                     }
                 case "status":
+                    boolean workingAsNormal = true;
+
+                    sender.sendMessage(Translation.of("towny.command.admin.header").replace("{subcommand}"," status"));
                     if (Listeners.isUsingTowny()) {
-                        sender.sendMessage(Translation.of("towny.command.admin.using_plugin").replace("{plugin}","Towny"));
+                        sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}","Towny"));
                     } else {
-                        sender.sendMessage(Translation.of("towny.command.admin.not_using_plugin").replace("{plugin}","Towny"));
+                        sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}","Towny"));
                     }
 
                     if (Listeners.isUsingPAPI()) {
-                        sender.sendMessage(Translation.of("towny.command.admin.using_plugin").replace("{plugin}","PlaceholderAPI"));
+                        sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}","PlaceholderAPI"));
                     } else {
-                        sender.sendMessage(Translation.of("towny.command.admin.not_using_plugin").replace("{plugin}","PlaceholderAPI"));
+                        sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}","PlaceholderAPI"));
                     }
 
                     if (Listeners.isUsingBungee()) {
-                        sender.sendMessage(Translation.of("towny.command.admin.using_plugin").replace("{plugin}","Bungeecord"));
+                        sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}","Bungeecord"));
                     } else {
-                        sender.sendMessage(Translation.of("towny.command.admin.not_using_dependency").replace("{plugin}","Bungeecord"));
+                        sender.sendMessage(Translation.of("towny.command.admin.status.not_using_dependency").replace("{plugin}","Bungeecord"));
+                        workingAsNormal = false;
                     }
+
+                    if (SQLHost.getMessenger().isConnected()) {
+                        sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}","SQL"));
+                    } else {
+                        sender.sendMessage(Translation.of("towny.command.admin.status.not_using_dependency").replace("{plugin}","SQL"));
+                        workingAsNormal = false;
+                    }
+
+                    if (!workingAsNormal) {
+                        sender.sendMessage(Translation.of("towny.command.admin.status.not_working"));
+                    }
+
+                    sender.sendMessage(Translation.of("towny.command.admin.footer"));
+                    if (Listeners.isUsingChat()) {
+                        sender.sendMessage(Translation.of("towny.command.admin.status.module_enabled").replace("{module}","Chat"));
+                    } else {
+                        sender.sendMessage(Translation.of("towny.command.admin.status.module_disabled").replace("{module}","Chat"));
+                    }
+                    sender.sendMessage(Translation.of("towny.command.admin.footer"));
+
                     return true;
                 default:
                     sender.sendMessage(Translation.of("towny.command.admin.unknown_arg"));
@@ -78,4 +103,8 @@ public class AdminCommandExecutor implements CommandExecutor {
 
         return false;
     }
+
+    /*static String replaceColors(String in) {
+        return in.replace("&", "\u00a7");
+    }*/
 }

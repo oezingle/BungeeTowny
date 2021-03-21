@@ -2,15 +2,19 @@ en:
   command:
     not_found: "&cThat command can't be used here!"
     admin:
+      header: "&6.oOo.&e_____________&6/bungeetowny{subcommand}&e_____________&6.oOo."
+      footer: "&e____________________________________________"
       help:
-        row1: "&6.oOo.&e_____________&6/bungeetowny&e_____________&6.oOo."
-        row2: "/bungeetowny reload [module]"
-        row3: "/bungeetowny status"
-        row4: ""
+        row1: "&7/bungeetowny reload [chat|sql|messages|server]"
+        row2: "&7/bungeetowny status"
       unknown_arg: "&cUnknown argument!"
       reload_success: "&aSuccessfully reloaded {module}"
-      using_plugin: "&aUsing {plugin}"
-      not_using_plugin: "&eNot using {plugin}"
-      not_using_dependency: "&cNot using {plugin}"
+      status:
+        using_plugin: "&aUsing {plugin}"
+        not_using_plugin: "&eNot using {plugin}"
+        not_using_dependency: "&cNot using {plugin}"
+        module_enabled: "&a{module} module enabled"
+        module_disabled: "&e{module} module disabled"
+        not_working: "&cThe plugin is missing some dependencies"
   join: "&6{playername}&b joined the town!"
   leave: "&b{playername} left the town"

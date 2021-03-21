@@ -6,6 +6,7 @@ import com.paratopiamc.bungee_towny.chat.Channels;
 import com.paratopiamc.bungee_towny.chat.ChatColors;
 import com.paratopiamc.bungee_towny.chat.ChatFormats;
 import com.paratopiamc.bungee_towny.command.AdminCommandExecutor;
+import com.paratopiamc.bungee_towny.command.AdminCommandTabCompletor;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.Bukkit;
@@ -88,6 +89,7 @@ public final class BungeeTowny extends JavaPlugin {
         Metrics metrics = new Metrics(this, pluginId);
 
         getCommand("bungeetowny").setExecutor(new AdminCommandExecutor());
+        getCommand("bungeetowny").setTabCompleter(new AdminCommandTabCompletor());
 
         getLogger().info("BungeeTown Enabled!");
     }
