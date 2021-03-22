@@ -8,9 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Towns {
+public class Towns {
 
-    public static List<String> getResidents(String town) {
+    private SQLMessage sqlMessage;
+
+    public Towns() {
+        sqlMessage = new SQLMessage(SQLHost.getCredentials());
+    }
+
+    public List<String> getResidents(String town) {
         try {
             ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT uuid FROM players WHERE town  = '" + town + "';");
 
@@ -27,7 +33,7 @@ public abstract class Towns {
         return null;
     }
 
-    public static List<String> getAllNames() {
+    public List<String> getAllNames() {
         try {
             ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players;");
 
@@ -44,7 +50,7 @@ public abstract class Towns {
         return null;
     }
 
-    public static List<String> getAllUUIDs() {
+    public List<String> getAllUUIDs() {
         try {
             ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT uuid FROM players;");
 
@@ -61,7 +67,7 @@ public abstract class Towns {
         return null;
     }
 
-    public static List<String> getResidentNames(String town) {
+    public List<String> getResidentNames(String town) {
         try {
             ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players WHERE town  = '" + town + "';");
 

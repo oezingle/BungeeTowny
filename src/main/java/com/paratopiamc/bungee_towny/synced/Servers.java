@@ -10,10 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public abstract class Servers {
+public class Servers {
+
+    private SQLMessage sqlMessage;
+
+    public Servers() {
+        sqlMessage = sqlMessage;
+    }
 
     public String getServerByName(String name) {
-        ResultSet result = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT server_uuid FROM servers WHERE server_name = '" + name + "';");
+        ResultSet result = sqlMessage.executeSelectSQL("SELECT server_uuid FROM servers WHERE server_name = '" + name + "';");
 
         try {
             while (result.next()) {
@@ -33,7 +39,7 @@ public abstract class Servers {
     }
 
     public String getServerByUUID(String uuid) {
-        ResultSet result = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT server_name FROM servers WHERE server_uuid = '" + uuid + "';");
+        ResultSet result = sqlMessage.executeSelectSQL("SELECT server_name FROM servers WHERE server_uuid = '" + uuid + "';");
 
         try {
             while (result.next()) {
@@ -51,10 +57,8 @@ public abstract class Servers {
         return null;
     }
 
-    public static List<String> allOtherServers() {
-        String thisServerUuid = BungeeTowny.getServerUUID();
-
-        ResultSet result = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT server_uuid FROM servers WHERE server_uuid != '" + thisServerUuid + "';");
+    public List<String> allOtherServers() {
+        ResultSet result = sqlMessage.executeSelectSQL("SELECT server_uuid FROM servers WHERE server_uuid != '" + BungeeTowny.getServerUUID() + "';");
 
         try {
             List<String> uuids = new ArrayList<>();

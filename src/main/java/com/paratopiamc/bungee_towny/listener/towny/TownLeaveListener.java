@@ -2,7 +2,7 @@ package com.paratopiamc.bungee_towny.listener.towny;
 
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.paratopiamc.bungee_towny.BungeeTowny;
-import com.paratopiamc.bungee_towny.synced.players.Players;
+import com.paratopiamc.bungee_towny.synced.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

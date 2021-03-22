@@ -1,7 +1,7 @@
 package com.paratopiamc.bungee_towny.command.chat.mute;
 
 import com.paratopiamc.bungee_towny.Translation;
-import com.paratopiamc.bungee_towny.synced.players.Players;
+import com.paratopiamc.bungee_towny.synced.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

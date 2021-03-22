@@ -10,7 +10,7 @@ import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessage;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.synced.Nations;
-import com.paratopiamc.bungee_towny.synced.players.Players;
+import com.paratopiamc.bungee_towny.synced.Players;
 import com.paratopiamc.bungee_towny.synced.Towns;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -188,23 +188,23 @@ public class ChatSendEvent extends Event {
                         switch (channel.getType()) {
                             case TOWN:
                                 if (channel.isJSON()) {
-                                    jsonSend(Towns.getResidentNames(town), finalMessage, ignores);
+                                    jsonSend(new Towns().getResidentNames(town), finalMessage, ignores);
                                 } else {
-                                    simpleSend(Towns.getResidentNames(town), finalMessage, ignores);
+                                    simpleSend(new Towns().getResidentNames(town), finalMessage, ignores);
                                 }
                                 break;
                             case NATION:
                                 if (channel.isJSON()) {
-                                    jsonSend(Nations.getResidentNames(nation), finalMessage, ignores);
+                                    jsonSend(new Nations().getResidentNames(nation), finalMessage, ignores);
                                 } else {
-                                    simpleSend(Nations.getResidentNames(nation), finalMessage, ignores);
+                                    simpleSend(new Nations().getResidentNames(nation), finalMessage, ignores);
                                 }
                                 break;
                             case GLOBAL:
                                 if (channel.isJSON()) {
-                                    jsonSend(Towns.getAllNames(), finalMessage, ignores);
+                                    jsonSend(new Towns().getAllNames(), finalMessage, ignores);
                                 } else {
-                                    simpleSend(Towns.getAllNames(), finalMessage, ignores);
+                                    simpleSend(new Towns().getAllNames(), finalMessage, ignores);
                                 }
                                 break;
                             case MESSAGE: {

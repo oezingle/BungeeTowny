@@ -3,7 +3,7 @@ package com.paratopiamc.bungee_towny.listener.bukkit;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.chat.Channels;
 import com.paratopiamc.bungee_towny.chat.ChatSendEvent;
-import com.paratopiamc.bungee_towny.synced.players.Players;
+import com.paratopiamc.bungee_towny.synced.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

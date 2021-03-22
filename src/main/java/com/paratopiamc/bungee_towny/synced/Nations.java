@@ -8,11 +8,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Nations {
+public class Nations {
+
+    private SQLMessage sqlMessage;
+
+    public Nations() {
+        sqlMessage = new SQLMessage(SQLHost.getCredentials());
+    }
 
     public List<String> getResidents(String nation) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT uuid FROM players WHERE nation  = '" + nation + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT uuid FROM players WHERE nation  = '" + nation + "';");
 
             List<String> list = new ArrayList<>();
 
@@ -27,9 +33,9 @@ public abstract class Nations {
         return null;
     }
 
-    public static List<String> getResidentNames(String nation) {
+    public List<String> getResidentNames(String nation) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players WHERE nation  = '" + nation + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT name FROM players WHERE nation  = '" + nation + "';");
 
             List<String> list = new ArrayList<>();
 

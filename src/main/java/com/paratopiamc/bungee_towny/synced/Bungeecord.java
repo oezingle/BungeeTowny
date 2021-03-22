@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.synced.players;
+package com.paratopiamc.bungee_towny.synced;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import org.bukkit.Bukkit;

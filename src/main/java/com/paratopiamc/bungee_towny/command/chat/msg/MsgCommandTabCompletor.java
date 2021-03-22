@@ -1,6 +1,6 @@
 package com.paratopiamc.bungee_towny.command.chat.msg;
 
-import com.paratopiamc.bungee_towny.synced.players.Bungeecord;
+import com.paratopiamc.bungee_towny.synced.Bungeecord;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
