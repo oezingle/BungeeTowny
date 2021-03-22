@@ -140,7 +140,7 @@ public class ChatSendEvent extends Event {
                         .replace("{permgroupprefix}", TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(resident, "groupprefix"))
                         .replace("{permgroupsuffix}", TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(resident, "groupsuffix"))
                         .replace("{group}", TownyUniverse.getInstance().getPermissionSource().getPlayerGroup(player))
-                        .replace("{townycolor}", resident.isMayor() ? (resident.isKing() ? ChatColors.getKingColor() : ChatColors.getMayorColor()) : ChatColors.getResidentColor())
+                        .replace("{townycolor}", resident.isMayor() ? (resident.isKing() ? Translation.of("towny.colors.king") : Translation.of("towny.colors.mayor")) : Translation.of("towny.colors.resident"))
                         .replace("{townyprefix}", resident.hasTitle() ? " " + players.getTitle(uuid) : getNamePrefix(resident))
                         .replace("{townypostfix}", resident.hasSurname() ? " " + resident.getSurname() : getNamePostfix(resident))
                         .replace("{townynameprefix}", getNamePrefix(resident))
@@ -237,7 +237,7 @@ public class ChatSendEvent extends Event {
                                 if (sendToPlayer != null) {
                                     sendToPlayer.sendMessage(fromMessage);
                                 } else {
-                                    Plugin plugin = Listeners.getPlugin();
+                                    Plugin plugin = BungeeTowny.getThisPlugin();
 
                                     BungeeMessage messages = new BungeeMessage(plugin);
 
@@ -258,7 +258,7 @@ public class ChatSendEvent extends Event {
                             }
                             default: {
                                 //send a plugin message to the other servers, because we have to check permissions with these
-                                Plugin plugin = Listeners.getPlugin();
+                                Plugin plugin = BungeeTowny.getThisPlugin();
 
                                 String permission = channel.getPermission();
 
@@ -345,7 +345,7 @@ public class ChatSendEvent extends Event {
             recipients.remove(ingore);
         }
 
-        Plugin plugin = Listeners.getPlugin();
+        Plugin plugin = BungeeTowny.getThisPlugin();
         BungeeMessage messages = new BungeeMessage(plugin);
 
         for (String recipient : recipients) {
@@ -362,7 +362,7 @@ public class ChatSendEvent extends Event {
             recipients.remove(ingore);
         }
 
-        Plugin plugin = Listeners.getPlugin();
+        Plugin plugin = BungeeTowny.getThisPlugin();
         BungeeMessage messages = new BungeeMessage(plugin);
 
         for (String recipient : recipients) {

@@ -3,7 +3,6 @@ package com.paratopiamc.bungee_towny;
 import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessage;
 import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessageListener;
 import com.paratopiamc.bungee_towny.chat.Channels;
-import com.paratopiamc.bungee_towny.chat.ChatColors;
 import com.paratopiamc.bungee_towny.chat.ChatFormats;
 import com.paratopiamc.bungee_towny.command.AdminCommandExecutor;
 import com.paratopiamc.bungee_towny.command.AdminCommandTabCompletor;
@@ -32,8 +31,8 @@ public final class BungeeTowny extends JavaPlugin {
     static BungeeMessage bungeeMessager;
     static BungeeMessageListener bungeeListener;
 
-    static String serverUUID;
-    static String serverName;
+    private static String serverUUID;
+    private static String serverName;
 
     public static BukkitTask waitForBungeePlayer;
     private static BukkitTask getPlayerList;
@@ -312,7 +311,7 @@ public final class BungeeTowny extends JavaPlugin {
             chatConfigFile = new File(thisPlugin.getDataFolder(), "chat/ChatConfig.yml");
             FileConfiguration chatConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
 
-            ChatColors.init(chatConfig.getConfigurationSection("colour"));
+            Translation.setFromConfig(chatConfig.getConfigurationSection("colour"), "towny.colors");
             ChatFormats.init(chatConfig.getConfigurationSection("tag_formats"));
 
             SQLHost.set_config("chatConfig", chatConfigFile);
