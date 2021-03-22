@@ -1,6 +1,7 @@
 package com.paratopiamc.bungee_towny.sql;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
+import com.paratopiamc.bungee_towny.listener.Listeners;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -72,7 +73,7 @@ public abstract class SQLHost {
         //queue - server_uuid | action
         table_info = new HashMap<>();
         table_info.put("server_uuid", "VARCHAR(36) NOT NULL");
-        table_info.put("type", "VARCHAR(10) NOT NULL");
+        //table_info.put("type", "VARCHAR(10) NOT NULL");
         table_info.put("action", "JSON");
         messenger.createTable("action_queue", table_info);
 
@@ -95,13 +96,13 @@ public abstract class SQLHost {
 
     }
 
-    public static void set_server(String uuid, String name, boolean usingTowny) {
-        //delete the old entry
+    public static void set_server(String uuid, String name) {
+        //delete the old entry (if there is one)
         messenger.delete("servers","WHERE server_uuid = '" + uuid + "';");
 
-        messenger.insert("servers", "('" + name + "', " + usingTowny + ", '" + uuid + "' )");
+        messenger.executeSQL("INSERT INTO servers (server_name, server_uuid) VALUES ('" + name + "', '" + uuid + "')");
 
-        if (Bukkit.getPluginManager().getPlugin("Towny") != null) {
+        if (Listeners.isUsingTowny()) {
             //set that bit to true
             messenger.executeSQL(
                     " UPDATE servers SET using_towny = true WHERE server_uuid ='" + BungeeTowny.getServerUUID() + "';"

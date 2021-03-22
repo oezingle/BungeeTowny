@@ -1,7 +1,7 @@
 package com.paratopiamc.bungee_towny.command.chat.mute;
 
 import com.paratopiamc.bungee_towny.Translation;
-import com.paratopiamc.bungee_towny.synced.Players;
+import com.paratopiamc.bungee_towny.synced.players.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,12 +23,12 @@ public class MuteCommandExecutor implements CommandExecutor {
                 String uuid = player.getUniqueId().toString();
                 String name = player.getName();
 
-                if (Players.isMuted(uuid)) {
+                if (new Players().isMuted(uuid)) {
                     sender.sendMessage(Translation.of("chat.admin.already_muted"));
                     return true;
                 } else {
                     sender.sendMessage(Translation.of("chat.admin.mute_success").replace("{playername}",name));
-                    Players.setMuted(uuid, true);
+                    new Players().setMuted(uuid, true);
                 }
 
                 //notify them

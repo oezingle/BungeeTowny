@@ -4,7 +4,7 @@ import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.Translation;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import com.paratopiamc.bungee_towny.sql.SQLMessage;
-import com.paratopiamc.bungee_towny.synced.Players;
+import com.paratopiamc.bungee_towny.synced.players.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,9 +13,6 @@ import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class IgnoreCommandExecutor implements CommandExecutor {
 
@@ -35,7 +32,7 @@ public class IgnoreCommandExecutor implements CommandExecutor {
                 public void run() {
                     sender.sendMessage(Translation.of("chat.ignore.header"));
                     String ignoring = "";
-                    for (String name : Players.ignoringNames(uuid)) {
+                    for (String name : new Players().ignoringNames(uuid)) {
                         ignoring += "&6" + name + "&f, ";
                     }
 
@@ -56,7 +53,7 @@ public class IgnoreCommandExecutor implements CommandExecutor {
             Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), new Runnable() {
                 @Override
                 public void run() {
-                    String otherUuid = Players.getUUID(args[0]);
+                    String otherUuid = new Players().getUUID(args[0]);
 
                     SQLMessage message = new SQLMessage(SQLHost.getCredentials());
 

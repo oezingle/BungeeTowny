@@ -6,6 +6,8 @@ import com.paratopiamc.bungee_towny.sql.SQLMessage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 public abstract class Servers {
@@ -46,6 +48,25 @@ public abstract class Servers {
         }
 
         //fallback value
+        return null;
+    }
+
+    public static List<String> allOtherServers() {
+        String thisServerUuid = BungeeTowny.getServerUUID();
+
+        ResultSet result = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT server_uuid FROM servers WHERE server_uuid != '" + thisServerUuid + "';");
+
+        try {
+            List<String> uuids = new ArrayList<>();
+            while(result.next()) {
+                uuids.add(result.getString("server_uuid"));
+            }
+            return uuids;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        //this value shouldn't be reached
         return null;
     }
 

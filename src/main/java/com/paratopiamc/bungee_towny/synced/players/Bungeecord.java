@@ -1,8 +1,7 @@
-package com.paratopiamc.bungee_towny.synced;
+package com.paratopiamc.bungee_towny.synced.players;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.paratopiamc.bungee_towny.command.chat.channel;
 import com.paratopiamc.bungee_towny.Translation;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.chat.ChatSendEvent;
-import com.paratopiamc.bungee_towny.synced.Players;
+import com.paratopiamc.bungee_towny.synced.players.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,9 +35,11 @@ public class ChatCommandExecutor implements CommandExecutor {
         Player player = ((Player) sender).getPlayer();
         String uuid = player.getUniqueId().toString();
 
+        Players players = new Players();
+
         if (args.length < 1) {
             // /chat
-            sender.sendMessage(Translation.of("chat.current_channel").replace("{channel}", Players.getChannel(uuid)));
+            sender.sendMessage(Translation.of("chat.current_channel").replace("{channel}", players.getChannel(uuid)));
             return true;
         } else {
             for (Channel channel : channels.values()) {
@@ -46,11 +48,11 @@ public class ChatCommandExecutor implements CommandExecutor {
                 }
 
                 if (args[0].equalsIgnoreCase(channel.getName()) && sender.hasPermission(channel.getPermission())) {
-                    if (channel.getName().equals("town") && Players.getTown(uuid).equalsIgnoreCase("townless")) {
+                    if (channel.getName().equals("town") && players.getTown(uuid).equalsIgnoreCase("townless")) {
                         sender.sendMessage(no_town);
                         return true;
                     }
-                    if (channel.getName().equals("nation") && Players.getNation(uuid).equalsIgnoreCase("nationless")) {
+                    if (channel.getName().equals("nation") && players.getNation(uuid).equalsIgnoreCase("nationless")) {
                         sender.sendMessage(no_nation);
                         return true;
                     }
@@ -63,7 +65,7 @@ public class ChatCommandExecutor implements CommandExecutor {
                         sender.sendMessage(Translation.of("chat.channel_switch").replace("{channel}", channel.getName()));
 
                         //switch the channel
-                        Players.setChannel(channel.getName(), uuid);
+                        players.setChannel(channel.getName(), uuid);
                     } else {
                         // /chat <channel> <msg>
                         String message = "";

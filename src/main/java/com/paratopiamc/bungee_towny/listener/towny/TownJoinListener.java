@@ -3,7 +3,7 @@ package com.paratopiamc.bungee_towny.listener.towny;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.paratopiamc.bungee_towny.BungeeTowny;
-import com.paratopiamc.bungee_towny.synced.Players;
+import com.paratopiamc.bungee_towny.synced.players.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,13 +24,15 @@ public class TownJoinListener implements Listener {
                 @Override
                 public void run() {
                     //set town with sql
-                    Players.setTown(town, uuid);
+                    Players players = new Players();
+
+                    players.setTown(town, uuid);
 
                     try {
                         String nation = event.getResident().getTown().getNation().getName();
 
                         //set nation with sql
-                        Players.setNation(nation, uuid);
+                        players.setNation(nation, uuid);
                     } catch (NotRegisteredException e) {
 
                     }

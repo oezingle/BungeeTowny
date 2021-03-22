@@ -39,10 +39,6 @@ public class PlayerJoinListener implements Listener {
                 }
 
                 if (!alreadyExists) {
-            /*new SQLMessage(SQLHost.getCredentials()).executeSQL(
-                    "INSERT INTO players (uuid, name, town, channel, nation, title, res, muted) VALUES (\"" + uuid + "\",\"" + name + "\",null,\"" + "general" + "\", null, null, null, false);"
-            );*/
-
                     new SQLMessage(SQLHost.getCredentials()).executeSQL(
                             "INSERT INTO players (uuid, name) VALUES (\"" + uuid + "\",\"" + name + "\");"
                     );

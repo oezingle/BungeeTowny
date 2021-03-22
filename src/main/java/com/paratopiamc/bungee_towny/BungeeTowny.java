@@ -70,17 +70,19 @@ public final class BungeeTowny extends JavaPlugin {
         waitForBungeePlayer = new BukkitRunnable() {
             @Override
             public void run() {
-                //load in bungeeMessage
-                //Tx
-                getServer().getMessenger().registerOutgoingPluginChannel(thisPlugin, "BungeeCord");
-                //Rx
-                bungeeListener = new BungeeMessageListener(thisPlugin);
-                getServer().getMessenger().registerIncomingPluginChannel(thisPlugin, "BungeeCord", bungeeListener);
+                if (!isCancelled()) {
+                    //load in bungeeMessage
+                    //Tx
+                    getServer().getMessenger().registerOutgoingPluginChannel(thisPlugin, "BungeeCord");
+                    //Rx
+                    bungeeListener = new BungeeMessageListener(thisPlugin);
+                    getServer().getMessenger().registerIncomingPluginChannel(thisPlugin, "BungeeCord", bungeeListener);
 
-                bungeeMessager = new BungeeMessage(thisPlugin);
+                    bungeeMessager = new BungeeMessage(thisPlugin);
 
-                bungeeMessager.writeString("GetServer");
-                bungeeMessager.send();
+                    bungeeMessager.writeString("GetServer");
+                    bungeeMessager.send();
+                }
             }
         }.runTaskTimer(this, 20, 60 * 20); //60 second timeframe
 
@@ -92,7 +94,7 @@ public final class BungeeTowny extends JavaPlugin {
             }
         }.runTaskTimer(this, 20, 20 * 15); //15 s timeframe
 
-        //Bstats lmao
+        //bstats integration
         int pluginId = 10724;
         Metrics metrics = new Metrics(this, pluginId);
 
@@ -167,7 +169,7 @@ public final class BungeeTowny extends JavaPlugin {
     }
 
     static void update_server_listing() {
-        SQLHost.set_server(serverUUID, serverName, Listeners.isUsingTowny());
+        SQLHost.set_server(serverUUID, serverName);
     }
 
     public static void reload() {

@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.synced;
+package com.paratopiamc.bungee_towny.synced.players;
 
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import com.paratopiamc.bungee_towny.sql.SQLMessage;
@@ -8,10 +8,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Players {
-    public static String getTown(String uuid) {
+public class Players {
+
+    private SQLMessage sqlMessage;
+
+    public Players() {
+        sqlMessage = new SQLMessage(SQLHost.getCredentials());
+    }
+
+    public String getTown(String uuid) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT town FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT town FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 String value = results.getString("town");
@@ -24,33 +31,33 @@ public abstract class Players {
         return "townless";
     }
 
-    public static void setTown(String town, String uuid) {
-        new SQLMessage(SQLHost.getCredentials()).executeSQL(
+    public void setTown(String town, String uuid) {
+        sqlMessage.executeSQL(
                 " UPDATE players" +
                         "    SET town = '" + town + "'" +
                         "WHERE uuid ='" + uuid + "';"
         );
     }
 
-    public static void setNation(String nation, String uuid) {
-        new SQLMessage(SQLHost.getCredentials()).executeSQL(
+    public void setNation(String nation, String uuid) {
+        sqlMessage.executeSQL(
                 " UPDATE players" +
                         "    SET nation = '" + nation + "'" +
                         "WHERE uuid ='" + uuid + "';"
         );
     }
 
-    public static void setChannel(String channelName, String uuid) {
-        new SQLMessage(SQLHost.getCredentials()).executeSQL(
+    public void setChannel(String channelName, String uuid) {
+        sqlMessage.executeSQL(
                 " UPDATE players" +
                         "    SET channel = '" + channelName + "'" +
                         "WHERE uuid ='" + uuid + "';"
         );
     }
 
-    public static String getNation(String uuid) {
+    public String getNation(String uuid) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT nation FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT nation FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 String value = results.getString("nation");
@@ -63,9 +70,9 @@ public abstract class Players {
         return "nationless";
     }
 
-    public static String getChannel(String uuid) {
+    public String getChannel(String uuid) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT channel FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT channel FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 String value = results.getString("channel");
@@ -78,9 +85,9 @@ public abstract class Players {
         return "general";
     }
 
-    public static String getUUID(String name) {
+    public String getUUID(String name) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT uuid FROM players WHERE name  = '" + name + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT uuid FROM players WHERE name  = '" + name + "';");
 
             if (results.next()) {
                 return results.getString("uuid");
@@ -92,9 +99,9 @@ public abstract class Players {
         return null;
     }
 
-    public static String getName(String uuid) {
+    public String getName(String uuid) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT name FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 return results.getString("name");
@@ -106,10 +113,10 @@ public abstract class Players {
         return "";
     }
 
-    public static List<String> ignoringNames(String uuid) {
+    public List<String> ignoringNames(String uuid) {
         //SELECT * FROM items WHERE items.xml LIKE '%123456%'
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players WHERE ignored_by LIKE '%" + uuid +"%';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT name FROM players WHERE ignored_by LIKE '%" + uuid +"%';");
 
             List<String> names = new ArrayList<>();
             while (results.next()) {
@@ -124,9 +131,9 @@ public abstract class Players {
         return new ArrayList<>();
     }
 
-    public static String[] ignoredBy(String uuid) {
+    public String[] ignoredBy(String uuid) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT ignored_by FROM players WHERE uuid = '" + uuid + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT ignored_by FROM players WHERE uuid = '" + uuid + "';");
 
             if (results.next()) {
                 return results.getString("ignored_by").split(",");
@@ -139,7 +146,7 @@ public abstract class Players {
         return new String[]{};
     }
 
-    public static String[] ignoredByNames(String uuid) {
+    public String[] ignoredByNames(String uuid) {
         String[] uuids = ignoredBy(uuid);
 
         for (short i = 0; i < uuids.length; i++) {
@@ -149,9 +156,9 @@ public abstract class Players {
         return uuids;
     }
 
-    public static boolean isMuted(String uuid) {
+    public boolean isMuted(String uuid) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT muted FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT muted FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 Boolean value = results.getBoolean("muted");
@@ -164,17 +171,17 @@ public abstract class Players {
         return false;
     }
 
-    public static void setMuted(String uuid, boolean mute) {
-        new SQLMessage(SQLHost.getCredentials()).executeSQL(
+    public void setMuted(String uuid, boolean mute) {
+        sqlMessage.executeSQL(
                 " UPDATE players " +
                         "SET muted = " + mute + " " +
                         "WHERE uuid ='" + uuid + "';"
         );
     }
 
-    public static String getTitle(String uuid) {
+    public String getTitle(String uuid) {
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT title FROM players WHERE uuid  = '" + uuid + "';");
+            ResultSet results = sqlMessage.executeSelectSQL("SELECT title FROM players WHERE uuid  = '" + uuid + "';");
 
             if (results.next()) {
                 String value = results.getString("title");

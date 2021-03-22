@@ -4,7 +4,7 @@ import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.Translation;
 import com.paratopiamc.bungee_towny.chat.Channels;
 import com.paratopiamc.bungee_towny.chat.ChatSendEvent;
-import com.paratopiamc.bungee_towny.synced.Players;
+import com.paratopiamc.bungee_towny.synced.players.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -45,7 +45,7 @@ public class MsgCommandExecutor implements CommandExecutor {
                                     .replace("{time}", Double.toString(timeout))
                     );
 
-                    String lastChannel = Players.getChannel(uuid);
+                    String lastChannel = new Players().getChannel(uuid);
 
                     new BukkitRunnable() {
                         @Override
@@ -62,7 +62,7 @@ public class MsgCommandExecutor implements CommandExecutor {
                     sender.sendMessage(Translation.of("chat.msg.convo_set_no_expire").replace("{playername}", playerName));
                 }
                 //switch the channel
-                Players.setChannel("msg." + playerName, uuid);
+                new Players().setChannel("msg." + playerName + ".none", uuid);
             } else {
                 sender.sendMessage(Translation.of("towny.command.not_found"));
                 return true;
@@ -81,14 +81,22 @@ public class MsgCommandExecutor implements CommandExecutor {
 
             String uuid = ((Player) sender).getPlayer().getUniqueId().toString();
 
+            Players players = new Players();
+
+            String lastChannel = players.getChannel(uuid);
+            if (lastChannel.contains("msg.")) {
+                //grab this channel again
+                lastChannel = lastChannel.split(".")[3];
+            }
+
             String playerName = args[0];
 
-            String lastChannel = Players.getChannel(uuid);
-
-            Players.setChannel("msg." + playerName, uuid);
+            //                             using msg
+            //                                      recipient          channel to return to
+            players.setChannel("msg." + playerName + "." + lastChannel, uuid);
             ChatSendEvent event = new ChatSendEvent(message, Channels.get("msg"), ((Player) sender).getPlayer(), !Bukkit.isPrimaryThread());
             Bukkit.getPluginManager().callEvent(event);
-            Players.setChannel(lastChannel, uuid);
+
         }
 
         return true;

@@ -10,7 +10,7 @@ import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessage;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.synced.Nations;
-import com.paratopiamc.bungee_towny.synced.Players;
+import com.paratopiamc.bungee_towny.synced.players.Players;
 import com.paratopiamc.bungee_towny.synced.Towns;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -20,7 +20,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 public class ChatSendEvent extends Event {
@@ -30,6 +29,7 @@ public class ChatSendEvent extends Event {
     public ChatSendEvent(String playerMessage, Channel channel, Player player, boolean async) {
         super(async);
 
+        Players players = new Players();
 
         String uuid = player.getUniqueId().toString();
 
@@ -40,7 +40,7 @@ public class ChatSendEvent extends Event {
         String format = channel.getFormat();
 
         //TODO sync with essentials
-        if (Players.isMuted(uuid)) {
+        if (players.isMuted(uuid)) {
             player.sendMessage(Translation.of("chat.muted"));
             return;
         }
@@ -92,8 +92,8 @@ public class ChatSendEvent extends Event {
                 }
             }
 
-            String town = Players.getTown(uuid);
-            String nation = Players.getNation(uuid);
+            String town = players.getTown(uuid);
+            String nation = players.getNation(uuid);
 
             String townformatted = town == "townless" ? "" : toUpperStart(town);
             String nationfomatted = nation == "nationless" ? "" : toUpperStart(nation);
@@ -141,7 +141,7 @@ public class ChatSendEvent extends Event {
                         .replace("{permgroupsuffix}", TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(resident, "groupsuffix"))
                         .replace("{group}", TownyUniverse.getInstance().getPermissionSource().getPlayerGroup(player))
                         .replace("{townycolor}", resident.isMayor() ? (resident.isKing() ? ChatColors.getKingColor() : ChatColors.getMayorColor()) : ChatColors.getResidentColor())
-                        .replace("{townyprefix}", resident.hasTitle() ? " " + Players.getTitle(uuid) : getNamePrefix(resident))
+                        .replace("{townyprefix}", resident.hasTitle() ? " " + players.getTitle(uuid) : getNamePrefix(resident))
                         .replace("{townypostfix}", resident.hasSurname() ? " " + resident.getSurname() : getNamePostfix(resident))
                         .replace("{townynameprefix}", getNamePrefix(resident))
                         .replace("{townynamepostfix}", getNamePostfix(resident))
@@ -155,7 +155,7 @@ public class ChatSendEvent extends Event {
                     chatMessage = chatMessage.replace(tag, "");
                 }
 
-                chatMessage = chatMessage.replace("{title}", Players.getTitle(uuid));
+                chatMessage = chatMessage.replace("{title}", players.getTitle(uuid));
             }
 
 
@@ -171,122 +171,134 @@ public class ChatSendEvent extends Event {
                     .replace("{msg}", playerMessage)
                     .replace("  ", " ");
 
+            String finalMessage = chatMessage;
 
-            String[] ignores = Players.ignoredByNames(uuid);
+            Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), new Runnable() {
+                @Override
+                public void run() {
 
-            //TODO consider range
-            //TODO consider spying
-            //TODO essentials mute, essentials ignore
+                    String[] ignores = new Players().ignoredByNames(uuid);
 
-            if (Listeners.isUsingBungee()) {
-                //use the mysql db to figure out recipients
-                switch (channel.getType()) {
-                    case TOWN:
-                        if (channel.isJSON()) {
-                            jsonSend(Towns.getResidentNames(town), chatMessage, ignores);
-                        } else {
-                            simpleSend(Towns.getResidentNames(town), chatMessage, ignores);
-                        }
-                        break;
-                    case NATION:
-                        if (channel.isJSON()) {
-                            jsonSend(Nations.getResidentNames(nation), chatMessage, ignores);
-                        } else {
-                            simpleSend(Nations.getResidentNames(nation), chatMessage, ignores);
-                        }
-                        break;
-                    case GLOBAL:
-                        if (channel.isJSON()) {
-                            jsonSend(Towns.getAllNames(), chatMessage, ignores);
-                        } else {
-                            simpleSend(Towns.getAllNames(), chatMessage, ignores);
-                        }
-                        break;
-                    case MESSAGE: {
+                    //TODO consider range
+                    //TODO consider spying
+                    //TODO essentials mute, essentials ignore
 
-                        String sendTo = Players.getChannel(uuid).replace("msg.", "");
+                    if (Listeners.isUsingBungee()) {
+                        //use the mysql db to figure out recipients
+                        switch (channel.getType()) {
+                            case TOWN:
+                                if (channel.isJSON()) {
+                                    jsonSend(Towns.getResidentNames(town), finalMessage, ignores);
+                                } else {
+                                    simpleSend(Towns.getResidentNames(town), finalMessage, ignores);
+                                }
+                                break;
+                            case NATION:
+                                if (channel.isJSON()) {
+                                    jsonSend(Nations.getResidentNames(nation), finalMessage, ignores);
+                                } else {
+                                    simpleSend(Nations.getResidentNames(nation), finalMessage, ignores);
+                                }
+                                break;
+                            case GLOBAL:
+                                if (channel.isJSON()) {
+                                    jsonSend(Towns.getAllNames(), finalMessage, ignores);
+                                } else {
+                                    simpleSend(Towns.getAllNames(), finalMessage, ignores);
+                                }
+                                break;
+                            case MESSAGE: {
 
+                                String[] messageInfo = players.getChannel(uuid).split(".");
+                                String sendTo = messageInfo[2];
+                                String returnChannel = messageInfo[3];
 
-                        Player sendToPlayer = null;
-                        for (Player candidate : Bukkit.getOnlinePlayers()) {
-                            if (candidate.getName().equalsIgnoreCase(sendTo))
-                                sendToPlayer = candidate;
-                        }
+                                Player sendToPlayer = null;
+                                for (Player candidate : Bukkit.getOnlinePlayers()) {
+                                    if (candidate.getName().equalsIgnoreCase(sendTo))
+                                        sendToPlayer = candidate;
+                                }
 
-                        for (String ignore : ignores) {
-                            if (ignore.equalsIgnoreCase(sendTo)) {
-                                player.sendMessage(Translation.of("chat.msg.cant_message"));
-                                return;
-                            }
-                        }
-
-                        player.sendMessage(chatMessage
-                                .replace("{fromto}", Translation.of("chat.msg.to"))
-                                .replace("{playername}", sendTo));
-
-
-                        String fromMessage = chatMessage
-                                .replace("{fromto}", Translation.of("chat.msg.from"))
-                                .replace("{playername}", player.getName());
-
-                        if (sendToPlayer != null) {
-                            sendToPlayer.sendMessage(fromMessage);
-                        } else {
-                            Plugin plugin = Listeners.getPlugin();
-
-                            BungeeMessage messages = new BungeeMessage(plugin);
-
-                            messages.sendPluginMessage(
-                                    "{" +
-                                            "   \"command\":\"message\"," +
-                                            "   \"recipient\":\"" + sendTo + "\"," +
-                                            "   \"message\":\"" + fromMessage + "\"" +
-                                            "}");
-                        }
-                        break;
-                    }
-                    default: {
-                        //send a plugin message to the other servers, because we have to check permissions with these
-                        Plugin plugin = Listeners.getPlugin();
-
-                        String permission = channel.getPermission();
-
-                        BungeeMessage messages = new BungeeMessage(plugin);
-                        messages.sendPluginMessage(
-                                "{" +
-                                        "   \"command\":\"permission_chat\"," +
-                                        "   \"permission\":\"" + permission + "\"," +
-                                        "   \"message\":\"" + chatMessage + "\"" +
-                                        "   \"from_uuid\":\"" + uuid + "\"" +
-                                        "}");
-
-                        //do it locally
-                        for (Player candidate : Bukkit.getOnlinePlayers()) {
-                            if (candidate.hasPermission(permission)) {
-                                //check ignore list
-                                boolean shouldSend = true;
                                 for (String ignore : ignores) {
-                                    if (player.getName().equalsIgnoreCase(ignore)) {
-                                        shouldSend = false;
+                                    if (ignore.equalsIgnoreCase(sendTo)) {
+                                        player.sendMessage(Translation.of("chat.msg.cant_message"));
+                                        return;
                                     }
                                 }
 
-                                if (shouldSend) {
-                                    //TODO spigot chatAPI
-                                    candidate.sendMessage(chatMessage);
+                                player.sendMessage(finalMessage
+                                        .replace("{fromto}", Translation.of("chat.msg.to"))
+                                        .replace("{playername}", sendTo));
+
+                                String fromMessage = finalMessage
+                                        .replace("{fromto}", Translation.of("chat.msg.from"))
+                                        .replace("{playername}", player.getName());
+
+                                if (sendToPlayer != null) {
+                                    sendToPlayer.sendMessage(fromMessage);
+                                } else {
+                                    Plugin plugin = Listeners.getPlugin();
+
+                                    BungeeMessage messages = new BungeeMessage(plugin);
+
+                                    messages.sendPluginMessage(
+                                            "{" +
+                                                    "   \"command\":\"message\"," +
+                                                    "   \"recipient\":\"" + sendTo + "\"," +
+                                                    "   \"message\":\"" + fromMessage + "\"" +
+                                                    "}");
                                 }
+
+                                //finally, return the sender to their channel
+                                if (!returnChannel.equalsIgnoreCase("none")) {
+                                    players.setChannel(returnChannel, uuid);
+                                }
+
+                                break;
+                            }
+                            default: {
+                                //send a plugin message to the other servers, because we have to check permissions with these
+                                Plugin plugin = Listeners.getPlugin();
+
+                                String permission = channel.getPermission();
+
+                                BungeeMessage messages = new BungeeMessage(plugin);
+                                messages.sendPluginMessage(
+                                        "{" +
+                                                "   \"command\":\"permission_chat\"," +
+                                                "   \"permission\":\"" + permission + "\"," +
+                                                "   \"message\":\"" + finalMessage + "\"," +
+                                                "   \"from_uuid\":\"" + uuid + "\"" +
+                                                "}");
+
+                                //do it locally
+                                for (Player candidate : Bukkit.getOnlinePlayers()) {
+                                    if (candidate.hasPermission(permission)) {
+                                        //check ignore list
+                                        boolean shouldSend = true;
+                                        for (String ignore : ignores) {
+                                            if (player.getName().equalsIgnoreCase(ignore)) {
+                                                shouldSend = false;
+                                            }
+                                        }
+
+                                        if (shouldSend) {
+                                            //TODO spigot chatAPI
+                                            candidate.sendMessage(finalMessage);
+                                        }
+                                    }
+                                }
+
+                                break;
                             }
                         }
-
-                        break;
+                    } else {
+                        String bad_config = Translation.of("chat.bad_config");
+                        player.sendMessage(bad_config);
+                        Bukkit.getPluginManager().getPlugin("BungeeTowny").getLogger().info(bad_config + " | You need bungeecord for this plugin to work");
                     }
                 }
-
-            } else {
-                String bad_config = Translation.of("chat.bad_config");
-                player.sendMessage(bad_config);
-                Bukkit.getPluginManager().getPlugin("BungeeTowny").getLogger().info(bad_config + " | You need bungeecord for this plugin to work");
-            }
+            });
         } else {
             player.sendMessage(Translation.of("chat.null_channel"));
         }

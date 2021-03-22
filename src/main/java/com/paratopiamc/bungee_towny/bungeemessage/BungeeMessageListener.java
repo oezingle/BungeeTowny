@@ -6,8 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.listener.Listeners;
-import com.paratopiamc.bungee_towny.synced.Bungeecord;
-import com.paratopiamc.bungee_towny.synced.Players;
+import com.paratopiamc.bungee_towny.synced.players.Bungeecord;
+import com.paratopiamc.bungee_towny.synced.players.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -29,6 +29,7 @@ public class BungeeMessageListener implements PluginMessageListener {
 
     @Override
     public void onPluginMessageReceived(String channel, Player notUsedPlayer, byte[] byteMessage) {
+
         if (!channel.equals("BungeeCord")) {
             return;
         }
@@ -87,26 +88,31 @@ public class BungeeMessageListener implements PluginMessageListener {
                         String message = jsonObject.get("message").getAsString();
                         String uuid = jsonObject.get("from_uuid").getAsString();
 
-                        String[] ignores = Players.ignoredBy(uuid);
+                        String[] ignores = new Players().ignoredBy(uuid);
 
                         Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), new Runnable() {
                             @Override
                             public void run() {
                                 for (Player player : Bukkit.getOnlinePlayers()) {
-                                    if (player.hasPermission(permission)) {
-                                        //check ignore list
-                                        boolean shouldSend = true;
-                                        for (String ignore_uuid : ignores) {
-                                            if (player.getUniqueId().toString().equalsIgnoreCase(ignore_uuid)) {
-                                                shouldSend = false;
+                                    Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (player.hasPermission(permission)) {
+                                                //check ignore list
+                                                boolean shouldSend = true;
+                                                for (String ignore_uuid : ignores) {
+                                                    if (player.getUniqueId().toString().equalsIgnoreCase(ignore_uuid)) {
+                                                        shouldSend = false;
+                                                    }
+                                                }
+
+                                                if (shouldSend) {
+                                                    //TODO spigot chatAPI
+                                                    player.sendMessage(message);
+                                                }
                                             }
                                         }
-
-                                        if (shouldSend) {
-                                            //TODO spigot chatAPI
-                                            player.sendMessage(message);
-                                        }
-                                    }
+                                    });
                                 }
                             }
                         });
@@ -118,9 +124,15 @@ public class BungeeMessageListener implements PluginMessageListener {
                         String message = jsonObject.get("message").getAsString();
 
                         for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (player.getName().equalsIgnoreCase(recipient)) {
-                                player.sendMessage(message);
-                            }
+                            Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (player.getName().equalsIgnoreCase(recipient)) {
+                                        player.sendMessage(message);
+                                    }
+
+                                }
+                            });
                         }
 
                         break;
@@ -135,7 +147,7 @@ public class BungeeMessageListener implements PluginMessageListener {
                         BungeeTowny.getThisPlugin().getLogger().log(Level.WARNING, "Unknown BungeeTowny messaging channel command \"" + command + "\" received");
                         break;
                 }
-
         }
     }
+
 }
