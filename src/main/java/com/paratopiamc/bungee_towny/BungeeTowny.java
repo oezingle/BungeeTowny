@@ -311,9 +311,9 @@ public final class BungeeTowny extends JavaPlugin {
             chatConfigFile = new File(thisPlugin.getDataFolder(), "chat/ChatConfig.yml");
             FileConfiguration chatConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
 
-            Translation.setFromConfig(chatConfig.getConfigurationSection("colour"), "towny.colors");
-            ChatFormats.init(chatConfig.getConfigurationSection("tag_formats"));
-
+            Translation.setFromConfig(chatConfig.getConfigurationSection("colour"), "chat.towny.colors");
+            Translation.setFromConfig(chatConfig.getConfigurationSection("tag_formats"), "chat.towny.formats");
+            
             SQLHost.set_config("chatConfig", chatConfigFile);
 
             //BungeeTowny ================================================================================

@@ -95,9 +95,10 @@ public class ChatSendEvent extends Event {
             String town = players.getTown(uuid);
             String nation = players.getNation(uuid);
 
+            //TODO replace this whole section with something better.
             String townformatted = town == "townless" ? "" : toUpperStart(town);
             String nationfomatted = nation == "nationless" ? "" : toUpperStart(nation);
-            String bothformatted = ChatFormats.getBoth()
+            String bothformatted = Translation.of("chat.towny.formats.both")
                     .replace("%t", toUpperStart(town))
                     .replace("%n", toUpperStart(nation));
             bothformatted = String.format(bothformatted, town, nation);
@@ -105,19 +106,19 @@ public class ChatSendEvent extends Event {
             //set the message from the format
             String chatMessage = format
                     .replace("{modplayername}", player.getDisplayName())
-                    .replace("{worldname}", ChatFormats.getWorld().replace("%s", player.getWorld().getName()))
+                    .replace("{worldname}", Translation.of("chat.towny.formats.world").replace("%s", player.getWorld().getName()))
                     .replace("{town}", town)
-                    .replace("{towntagoverride}", ChatFormats.toTown(townformatted))
-                    .replace("{towntag}", ChatFormats.toTown(townformatted))
+                    .replace("{towntagoverride}", Translation.of("chat.towny.formats.town").replace("%s",townformatted))
+                    .replace("{towntag}", Translation.of("chat.towny.formats.town").replace("%s",townformatted))
                     .replace("{townformatted}", townformatted)
                     .replace("{nation}", nation)
                     .replace("{nationformatted}", nationfomatted)
-                    .replace("{nationtag}", ChatFormats.toNation(nationfomatted))
-                    .replace("{nationtagoverride}", ChatFormats.toNation(nationfomatted))
+                    .replace("{nationtag}", Translation.of("chat.towny.formats.nation").replace("%s",nationfomatted))
+                    .replace("{nationtagoverride}", Translation.of("chat.towny.formats.nation").replace("%s",nationfomatted))
                     .replace("{townytag}", bothformatted)
                     .replace("{townytagoverride}", bothformatted)
                     .replace("{townyformatted}", bothformatted)
-                    .replace("{servername}", ChatFormats.getWorld().replace("%s", BungeeTowny.getServerName()));
+                    .replace("{servername}", Translation.of("chat.towny.formats.world").replace("%s", BungeeTowny.getServerName()));
 
             switch (channel.getType()) {
                 case MESSAGE:
@@ -140,7 +141,7 @@ public class ChatSendEvent extends Event {
                         .replace("{permgroupprefix}", TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(resident, "groupprefix"))
                         .replace("{permgroupsuffix}", TownyUniverse.getInstance().getPermissionSource().getPrefixSuffix(resident, "groupsuffix"))
                         .replace("{group}", TownyUniverse.getInstance().getPermissionSource().getPlayerGroup(player))
-                        .replace("{townycolor}", resident.isMayor() ? (resident.isKing() ? Translation.of("towny.colors.king") : Translation.of("towny.colors.mayor")) : Translation.of("towny.colors.resident"))
+                        .replace("{townycolor}", resident.isMayor() ? (resident.isKing() ? Translation.of("chat.towny.colors.king") : Translation.of("chat.towny.colors.mayor")) : Translation.of("chat.towny.colors.resident"))
                         .replace("{townyprefix}", resident.hasTitle() ? " " + players.getTitle(uuid) : getNamePrefix(resident))
                         .replace("{townypostfix}", resident.hasSurname() ? " " + resident.getSurname() : getNamePostfix(resident))
                         .replace("{townynameprefix}", getNamePrefix(resident))
