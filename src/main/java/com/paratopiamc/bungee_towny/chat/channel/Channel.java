@@ -94,7 +94,7 @@ public class Channel {
             CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
 
             BukkitCommand executor;
-            if (type == ChannelType.MESSAGE) {
+            if (name == "msg") {
                 executor = new MsgCommandAlias(command);
             } else {
                 executor = new ChatAliasExecutor(command, name);

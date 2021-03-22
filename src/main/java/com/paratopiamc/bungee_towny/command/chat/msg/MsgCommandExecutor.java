@@ -16,49 +16,57 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class MsgCommandExecutor implements CommandExecutor {
 
     boolean togglable = false;
-    int timeout = 0;
+    double timeout = 0;
 
     public MsgCommandExecutor(ConfigurationSection config) {
         togglable = config.getBoolean("toggle");
 
-        timeout = config.getInt("timeout");
+        timeout = config.getDouble("timeout");
     }
 
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
         if (args.length == 0) {
             return false;
-        } else if (args.length == 1 && togglable) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(Translation.of("chat.msg.cant_message"));
+        } else if (args.length == 1) {
+            if (togglable) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(Translation.of("chat.msg.cant_message"));
+                    return true;
+                }
+
+                String uuid = ((Player) sender).getPlayer().getUniqueId().toString();
+
+                String playerName = args[0];
+                //set the channel without a message
+                if (timeout > 0) {
+                    sender.sendMessage(
+                            Translation.of("chat.msg.convo_set")
+                                    .replace("{playername}", playerName)
+                                    .replace("{time}", Double.toString(timeout))
+                    );
+
+                    String lastChannel = Players.getChannel(uuid);
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            sender.sendMessage(Translation.of("chat.msg.convo_expired"));
+
+
+                            //TODO Is this preferred over quietly setting the channel?
+                            Bukkit.dispatchCommand(sender, "chat " + lastChannel);
+                            //Players.setChannel(lastChannel, uuid);
+                        }
+                    }.runTaskLater(BungeeTowny.getThisPlugin(), (int) (20 * 60 * timeout)); //20 * 60 * timeout
+                } else {
+                    sender.sendMessage(Translation.of("chat.msg.convo_set_no_expire").replace("{playername}", playerName));
+                }
+                //switch the channel
+                Players.setChannel("msg." + playerName, uuid);
+            } else {
+                sender.sendMessage(Translation.of("towny.command.not_found"));
                 return true;
             }
-
-            String uuid = ((Player) sender).getPlayer().getUniqueId().toString();
-
-            String playerName = args[0];
-            //set the channel without a message
-            if (timeout > 0) {
-                sender.sendMessage(
-                        Translation.of("chat.msg.convo_set")
-                                .replace("{playername}", playerName)
-                                .replace("{time}",Integer.toString(timeout))
-                );
-
-                String lastChannel = Players.getChannel(uuid);
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        sender.sendMessage(Translation.of("chat.msg.convo_expired"));
-
-                        Players.setChannel(lastChannel, uuid);
-                    }
-                }.runTaskLater(BungeeTowny.getThisPlugin(), 20 * 60 * timeout); //20 * 60 * timeout
-            } else {
-                sender.sendMessage(Translation.of("chat.msg.convo_set_no_expire").replace("{playername}", playerName));
-            }
-            //switch the channel
-            Players.setChannel("msg|" + playerName, uuid);
         } else if (args.length > 1) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(Translation.of("chat.msg.cant_message"));
@@ -77,11 +85,10 @@ public class MsgCommandExecutor implements CommandExecutor {
 
             String lastChannel = Players.getChannel(uuid);
 
-            Players.setChannel("msg|" + playerName, uuid);
+            Players.setChannel("msg." + playerName, uuid);
             ChatSendEvent event = new ChatSendEvent(message, Channels.get("msg"), ((Player) sender).getPlayer(), !Bukkit.isPrimaryThread());
             Bukkit.getPluginManager().callEvent(event);
             Players.setChannel(lastChannel, uuid);
-
         }
 
         return true;

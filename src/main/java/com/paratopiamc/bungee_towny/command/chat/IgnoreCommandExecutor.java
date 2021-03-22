@@ -40,6 +40,8 @@ public class IgnoreCommandExecutor implements CommandExecutor {
                     }
 
                     if (ignoring.length() != 0) {
+                        ignoring = ignoring.substring(0, ignoring.length() - 2);
+
                         sender.sendMessage(Translation.of("chat.ignore.info"));
                         sender.sendMessage(ignoring.replace("&", "\u00a7"));
                     } else {
@@ -59,16 +61,16 @@ public class IgnoreCommandExecutor implements CommandExecutor {
                     SQLMessage message = new SQLMessage(SQLHost.getCredentials());
 
                     try {
-                        ResultSet results = message.executeSelectSQL("SELECT ignored_by FROM players WHERE uuid = '" + otherUuid +"'");
+                        ResultSet results = message.executeSelectSQL("SELECT ignored_by FROM players WHERE uuid = '" + otherUuid + "';");
 
                         if (results.next()) {
                             String ignore_list = results.getString("ignored_by");
 
                             if (ignore_list.contains(uuid)) {
-                                ignore_list = ignore_list.replace("|" + uuid, "");
+                                ignore_list = ignore_list.replace("," + uuid, "");
                                 sender.sendMessage(Translation.of("chat.ignore.no_longer").replace("{playername}", args[0]));
                             } else {
-                                ignore_list += "|" + uuid;
+                                ignore_list += "," + uuid;
                                 sender.sendMessage(Translation.of("chat.ignore.start").replace("{playername}", args[0]));
                             }
 

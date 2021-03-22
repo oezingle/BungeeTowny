@@ -10,7 +10,7 @@ msg:
   timeout: 0
   #channel type and format, as seen in Channels.yml and ChatConfig.yml
   channel:
-    commands: [ ]
+    commands: [ msg ]
     type: MESSAGE
     channeltag: '&f[&6MSG&f]'
     messagecolour: '&7'

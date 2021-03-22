@@ -25,7 +25,7 @@ public class ChatAliasExecutor extends BukkitCommand {
             argList += arg + " ";
         }
 
-        Bukkit.dispatchCommand(sender, "chat " + channel + " " + argList);
+        Bukkit.dispatchCommand(sender, "bungeetowny:chat " + channel + " " + argList);
 
         return true;
     }

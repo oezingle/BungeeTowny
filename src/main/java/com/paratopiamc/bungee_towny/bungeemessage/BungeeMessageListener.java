@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.listener.Listeners;
+import com.paratopiamc.bungee_towny.synced.Bungeecord;
+import com.paratopiamc.bungee_towny.synced.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -42,9 +44,7 @@ public class BungeeMessageListener implements PluginMessageListener {
 
                 String serverName = in.readUTF();
 
-                if (serverName != null) {
-                    BungeeTowny.setServerName(serverName);
-                }
+                BungeeTowny.setServerName(serverName);
                 break;
             case "PlayerList":
 
@@ -54,6 +54,8 @@ public class BungeeMessageListener implements PluginMessageListener {
                     String input = in.readUTF();
 
                     String[] players = input.split(", ");
+
+                    Bungeecord.setPlayerList(players);
                 }
 
                 break;
@@ -83,13 +85,31 @@ public class BungeeMessageListener implements PluginMessageListener {
                     case "permission_chat": {
                         String permission = jsonObject.get("permission").getAsString();
                         String message = jsonObject.get("message").getAsString();
+                        String uuid = jsonObject.get("from_uuid").getAsString();
 
-                        for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (player.hasPermission(permission)) {
-                                //TODO spigot chatAPI
-                                player.sendMessage(message);
+                        String[] ignores = Players.ignoredBy(uuid);
+
+                        Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), new Runnable() {
+                            @Override
+                            public void run() {
+                                for (Player player : Bukkit.getOnlinePlayers()) {
+                                    if (player.hasPermission(permission)) {
+                                        //check ignore list
+                                        boolean shouldSend = true;
+                                        for (String ignore_uuid : ignores) {
+                                            if (player.getUniqueId().toString().equalsIgnoreCase(ignore_uuid)) {
+                                                shouldSend = false;
+                                            }
+                                        }
+
+                                        if (shouldSend) {
+                                            //TODO spigot chatAPI
+                                            player.sendMessage(message);
+                                        }
+                                    }
+                                }
                             }
-                        }
+                        });
 
                         break;
                     }

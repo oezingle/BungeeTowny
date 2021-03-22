@@ -35,8 +35,6 @@ public final class BungeeTowny extends JavaPlugin {
     static String serverUUID;
     static String serverName;
 
-    static File server_uuid_yml;
-
     public static BukkitTask waitForBungeePlayer;
     private static BukkitTask getPlayerList;
 
@@ -84,7 +82,7 @@ public final class BungeeTowny extends JavaPlugin {
                 bungeeMessager.writeString("GetServer");
                 bungeeMessager.send();
             }
-        }.runTaskTimer(this, 20, 40); //2 second timeframe
+        }.runTaskTimer(this, 20, 60 * 20); //60 second timeframe
 
         getPlayerList = new BukkitRunnable() {
             @Override
@@ -130,23 +128,34 @@ public final class BungeeTowny extends JavaPlugin {
     }
 
     public static void setServerName(String name) {
-
-        if (serverName == null) {
+        if (name == null) {
             return;
         }
 
-        if (!serverName.equalsIgnoreCase(name)) {
+        File server_uuid_yml = new File(getThisPlugin().getDataFolder(), "server_uuid.yml");
+
+        if (serverName != name) {
+
             getThisPlugin().getLogger().info("The server's name has been changed to " + name);
 
             FileConfiguration server_uuid_config = YamlConfiguration.loadConfiguration(server_uuid_yml);
 
             server_uuid_config.set("this_server.name", name);
 
-            save_uuid_config(server_uuid_config);
+            serverName = name;
 
             update_server_listing();
+
+            try {
+                //TODO file header (for comment)
+                server_uuid_config.save(server_uuid_yml);
+            } catch (IOException exception) {
+                exception.printStackTrace();
+
+                //TODO this
+                BungeeTowny.getThisPlugin().getLogger().log(Level.SEVERE, "The UUID file cannot be saved! Check your file permissions");
+            }
         }
-        serverName = name;
     }
 
     public static String getServerName() {
@@ -155,18 +164,6 @@ public final class BungeeTowny extends JavaPlugin {
 
     public static String getServerUUID() {
         return serverUUID;
-    }
-
-    static void save_uuid_config(FileConfiguration server_uuid_config) {
-        try {
-            //TODO file header (for comment)
-            server_uuid_config.save(server_uuid_yml);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-
-            //TODO this
-            BungeeTowny.getThisPlugin().getLogger().log(Level.SEVERE, "The UUID file cannot be saved! Check your file permissions");
-        }
     }
 
     static void update_server_listing() {
@@ -242,7 +239,7 @@ public final class BungeeTowny extends JavaPlugin {
 
     public static void reloadServer() {
         //server UUID file
-        server_uuid_yml = new File(thisPlugin.getDataFolder(), "server_uuid.yml");
+        File server_uuid_yml = new File(thisPlugin.getDataFolder(), "server_uuid.yml");
         FileConfiguration server_uuid_config = YamlConfiguration.loadConfiguration(server_uuid_yml);
 
         boolean loaded_uuid = server_uuid_yml.exists();
@@ -254,7 +251,6 @@ public final class BungeeTowny extends JavaPlugin {
 
             server_uuid_config.set("this_server.uuid", serverUUID);
 
-            save_uuid_config(server_uuid_config);
         } else {
             serverUUID = server_uuid_config.getString("this_server.uuid");
             serverName = server_uuid_config.getString("this_server.name");
@@ -263,6 +259,16 @@ public final class BungeeTowny extends JavaPlugin {
         thisPlugin.getLogger().info("This server's UUID is " + serverUUID + " " + (loaded_uuid ? "(from file)" : "(newly generated)"));
         thisPlugin.getLogger().info("This server's name is " + serverName);
         update_server_listing();
+
+        try {
+            //TODO file header (for comment)
+            server_uuid_config.save(server_uuid_yml);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+
+            //TODO this
+            BungeeTowny.getThisPlugin().getLogger().log(Level.SEVERE, "The UUID file cannot be saved! Check your file permissions");
+        }
     }
 
     public static void reloadChat() {

@@ -18,7 +18,7 @@ public class MsgCommandAlias extends BukkitCommand {
             argList += arg + " ";
         }
 
-        Bukkit.dispatchCommand(sender, "message " + argList);
+        Bukkit.dispatchCommand(sender, "bungeetowny:message " + argList);
 
         return true;
     }

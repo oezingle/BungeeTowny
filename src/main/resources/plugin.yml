@@ -9,30 +9,30 @@ softdepend: [PlaceholderAPI, Towny]
 commands:
   chat:
     permission: bungeetowny.chat
-    usage: Syntax error. Use /<command> <channel>
+    usage: Syntax error. Use /chat <channel>
     description: the command to change channels. All other channel commands are ailases
   mute:
     permission: bungeetowny.chat.mute
-    usage: Syntax error. Use /<command> <player>
+    usage: Syntax error. Use /mute <player>
     description: a command to mute players across BungeeTowny's chat
   unmute:
     permission: bungeetowny.chat.mute
-    usage: Syntax error. Use /<command> <player>
+    usage: Syntax error. Use /unmute <player>
     description: a command to unmute players across BungeeTowny's chat
   town:
     permission: bungeetowny.town
-    usage: Syntax error. Use /<command>
+    usage: Syntax error. Use /town
     description: a stand-in for towny's /t and /town command
     aliases: [t]
   bungeetowny:
-    usage: Syntax error. Use /<command>
+    usage: Syntax error. Use /bungeetowny
     description: the administrative command
   message:
-    usage: Syntax error. Use /<command>
+    usage: Syntax error. Use /message
     description: similar to vanilla msg, but players can toggle and send messages across the network
     permission: bungeetowny.chat.msg
   ignore:
-    usage: Syntax error. Use /<command> <player>
+    usage: Syntax error. Use /ignore <player>
     description: allows players to ignore each other's chat messages
     permission: bungeetowny.chat.ignore
     aliases: [unignore]

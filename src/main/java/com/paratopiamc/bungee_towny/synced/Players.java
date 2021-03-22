@@ -1,6 +1,5 @@
 package com.paratopiamc.bungee_towny.synced;
 
-import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import com.paratopiamc.bungee_towny.sql.SQLMessage;
 
@@ -93,21 +92,61 @@ public abstract class Players {
         return null;
     }
 
+    public static String getName(String uuid) {
+        try {
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players WHERE uuid  = '" + uuid + "';");
+
+            if (results.next()) {
+                return results.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
     public static List<String> ignoringNames(String uuid) {
         //SELECT * FROM items WHERE items.xml LIKE '%123456%'
         try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players WHERE ignored_by LIKE '" + uuid +"'");
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT name FROM players WHERE ignored_by LIKE '%" + uuid +"%';");
 
             List<String> names = new ArrayList<>();
             while (results.next()) {
                 names.add(results.getString("name"));
             }
+            return names;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return new ArrayList<>();
+    }
+
+    public static String[] ignoredBy(String uuid) {
+        try {
+            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT ignored_by FROM players WHERE uuid = '" + uuid + "';");
+
+            if (results.next()) {
+                return results.getString("ignored_by").split(",");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new String[]{};
+    }
+
+    public static String[] ignoredByNames(String uuid) {
+        String[] uuids = ignoredBy(uuid);
+
+        for (short i = 0; i < uuids.length; i++) {
+            uuids[i] = getName(uuids[i]);
+        }
+
+        return uuids;
     }
 
     public static boolean isMuted(String uuid) {

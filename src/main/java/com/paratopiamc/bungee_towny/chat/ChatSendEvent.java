@@ -20,6 +20,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 public class ChatSendEvent extends Event {
@@ -170,6 +171,9 @@ public class ChatSendEvent extends Event {
                     .replace("{msg}", playerMessage)
                     .replace("  ", " ");
 
+
+            String[] ignores = Players.ignoredByNames(uuid);
+
             //TODO consider range
             //TODO consider spying
             //TODO essentials mute, essentials ignore
@@ -179,28 +183,29 @@ public class ChatSendEvent extends Event {
                 switch (channel.getType()) {
                     case TOWN:
                         if (channel.isJSON()) {
-                            jsonSend(Towns.getResidentNames(town), chatMessage);
+                            jsonSend(Towns.getResidentNames(town), chatMessage, ignores);
                         } else {
-                            simpleSend(Towns.getResidentNames(town), chatMessage);
+                            simpleSend(Towns.getResidentNames(town), chatMessage, ignores);
                         }
                         break;
                     case NATION:
                         if (channel.isJSON()) {
-                            jsonSend(Nations.getResidentNames(nation), chatMessage);
+                            jsonSend(Nations.getResidentNames(nation), chatMessage, ignores);
                         } else {
-                            simpleSend(Nations.getResidentNames(nation), chatMessage);
+                            simpleSend(Nations.getResidentNames(nation), chatMessage, ignores);
                         }
                         break;
                     case GLOBAL:
                         if (channel.isJSON()) {
-                            jsonSend(Towns.getAllNames(), chatMessage);
+                            jsonSend(Towns.getAllNames(), chatMessage, ignores);
                         } else {
-                            simpleSend(Towns.getAllNames(), chatMessage);
+                            simpleSend(Towns.getAllNames(), chatMessage, ignores);
                         }
                         break;
                     case MESSAGE: {
 
-                        String sendTo = Players.getChannel(uuid).replace("msg|", "");
+                        String sendTo = Players.getChannel(uuid).replace("msg.", "");
+
 
                         Player sendToPlayer = null;
                         for (Player candidate : Bukkit.getOnlinePlayers()) {
@@ -208,16 +213,24 @@ public class ChatSendEvent extends Event {
                                 sendToPlayer = candidate;
                         }
 
+                        for (String ignore : ignores) {
+                            if (ignore.equalsIgnoreCase(sendTo)) {
+                                player.sendMessage(Translation.of("chat.msg.cant_message"));
+                                return;
+                            }
+                        }
+
                         player.sendMessage(chatMessage
-                                .replace("{fromto}", "To")
+                                .replace("{fromto}", Translation.of("chat.msg.to"))
                                 .replace("{playername}", sendTo));
 
+
                         String fromMessage = chatMessage
-                                .replace("{fromto}", "From")
+                                .replace("{fromto}", Translation.of("chat.msg.from"))
                                 .replace("{playername}", player.getName());
 
                         if (sendToPlayer != null) {
-                            player.sendMessage(fromMessage);
+                            sendToPlayer.sendMessage(fromMessage);
                         } else {
                             Plugin plugin = Listeners.getPlugin();
 
@@ -244,13 +257,24 @@ public class ChatSendEvent extends Event {
                                         "   \"command\":\"permission_chat\"," +
                                         "   \"permission\":\"" + permission + "\"," +
                                         "   \"message\":\"" + chatMessage + "\"" +
+                                        "   \"from_uuid\":\"" + uuid + "\"" +
                                         "}");
 
                         //do it locally
                         for (Player candidate : Bukkit.getOnlinePlayers()) {
                             if (candidate.hasPermission(permission)) {
-                                //TODO spigot chatAPI
-                                candidate.sendMessage(chatMessage);
+                                //check ignore list
+                                boolean shouldSend = true;
+                                for (String ignore : ignores) {
+                                    if (player.getName().equalsIgnoreCase(ignore)) {
+                                        shouldSend = false;
+                                    }
+                                }
+
+                                if (shouldSend) {
+                                    //TODO spigot chatAPI
+                                    candidate.sendMessage(chatMessage);
+                                }
                             }
                         }
 
@@ -303,18 +327,29 @@ public class ChatSendEvent extends Event {
         return handlers;
     }
 
-    public void simpleSend(List<String> recipients, String message) {
+    public void simpleSend(List<String> recipients, String message, String[] ignores) {
+
+        for (String ingore : ignores) {
+            recipients.remove(ingore);
+        }
+
         Plugin plugin = Listeners.getPlugin();
         BungeeMessage messages = new BungeeMessage(plugin);
 
         for (String recipient : recipients) {
+
             messages.writeStrings(new String[]{"Message", recipient, message});
 
             messages.send();
         }
     }
 
-    public void jsonSend(List<String> recipients, String message) {
+    public void jsonSend(List<String> recipients, String message, String[] ignores) {
+
+        for (String ingore : ignores) {
+            recipients.remove(ingore);
+        }
+
         Plugin plugin = Listeners.getPlugin();
         BungeeMessage messages = new BungeeMessage(plugin);
 
