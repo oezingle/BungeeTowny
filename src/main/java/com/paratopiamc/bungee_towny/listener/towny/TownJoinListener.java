@@ -2,7 +2,9 @@ package com.paratopiamc.bungee_towny.listener.towny;
 
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.synced.Players;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -13,25 +15,34 @@ public class TownJoinListener implements Listener {
     public void onTownJoin(TownAddResidentEvent event) {
         String uuid = event.getResident().getUUID().toString();
 
-        String town = "townless";
-        String nation = "nationless";
+
+        //TODO the whole event living in double try-catch blocks is stupid
         try {
-            town = event.getResident().getTown().getName();
+            String town = event.getResident().getTown().getName();
+
+            Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    //set town with sql
+                    Players.setTown(town, uuid);
+
+                    try {
+                        String nation = event.getResident().getTown().getNation().getName();
+
+                        //set nation with sql
+                        Players.setNation(nation, uuid);
+                    } catch (NotRegisteredException e) {
+
+                    }
+
+                    //TODO add to the queue
+                    ///ta town test add zingle_
+                }
+            });
         } catch (NotRegisteredException e) {
             e.printStackTrace();
 
             System.err.println("THIS IS SERIOUS");
         }
-        //set town with sql
-        Players.setTown(town, uuid);
-
-        try {
-            nation = event.getResident().getTown().getNation().getName();
-        } catch (NotRegisteredException e) {}
-        //set nation with sql
-        Players.setNation(nation, uuid);
-
-        //add to the queue
-        ///ta town test add zingle_
     }
 }

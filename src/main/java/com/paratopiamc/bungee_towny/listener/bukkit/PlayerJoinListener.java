@@ -2,9 +2,11 @@ package com.paratopiamc.bungee_towny.listener.bukkit;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import com.paratopiamc.bungee_towny.sql.SQLMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,48 +20,51 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
 
-        Player player = event.getPlayer();
+        Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                Player player = event.getPlayer();
 
-        String uuid = player.getUniqueId().toString();
-        String name = player.getName();
-        //uuid|name|town|channel|nation|title|res
-        //create a player in the sql database
-        boolean alreadyExists = false;
-        try {
-            ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT * FROM players WHERE uuid = '" + uuid + "'");
+                String uuid = player.getUniqueId().toString();
+                String name = player.getName();
+                //uuid|name|town|channel|nation|title|res
+                //create a player in the sql database
+                boolean alreadyExists = false;
+                try {
+                    ResultSet results = new SQLMessage(SQLHost.getCredentials()).executeSelectSQL("SELECT * FROM players WHERE uuid = '" + uuid + "'");
 
-            alreadyExists = results.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+                    alreadyExists = results.next();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
-        if (!alreadyExists) {
+                if (!alreadyExists) {
             /*new SQLMessage(SQLHost.getCredentials()).executeSQL(
                     "INSERT INTO players (uuid, name, town, channel, nation, title, res, muted) VALUES (\"" + uuid + "\",\"" + name + "\",null,\"" + "general" + "\", null, null, null, false);"
             );*/
 
-            new SQLMessage(SQLHost.getCredentials()).executeSQL(
-                    "INSERT INTO players (uuid, name) VALUES (\"" + uuid + "\",\"" + name + "\");"
-            );
-        }
+                    new SQLMessage(SQLHost.getCredentials()).executeSQL(
+                            "INSERT INTO players (uuid, name) VALUES (\"" + uuid + "\",\"" + name + "\");"
+                    );
+                }
 
-        //update the username
-        new SQLMessage(SQLHost.getCredentials()).executeSQL(
-                " UPDATE players" +
-                        "    SET name = '" + name + "'" +
-                        "WHERE uuid ='" + uuid + "';"
-        );
+                //update the username
+                new SQLMessage(SQLHost.getCredentials()).executeSQL(
+                        " UPDATE players" +
+                                "    SET name = '" + name + "'" +
+                                "WHERE uuid ='" + uuid + "';"
+                );
 
-        //update the title and res if towny is around
-        if (Listeners.isUsingTowny()) {
-            Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-            String title = resident.getTitle();
+                //update the title and res if towny is around
+                if (Listeners.isUsingTowny()) {
+                    Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+                    String title = resident.getTitle();
 
-            new SQLMessage(SQLHost.getCredentials()).executeSQL(
-                    " UPDATE players" +
-                            "    SET title = '" + title + "'" +
-                            "WHERE uuid ='" + uuid + "';"
-            );
+                    new SQLMessage(SQLHost.getCredentials()).executeSQL(
+                            " UPDATE players" +
+                                    "    SET title = '" + title + "'" +
+                                    "WHERE uuid ='" + uuid + "';"
+                    );
 
 
             /*List<String> friends = new ArrayList<>();
@@ -68,9 +73,11 @@ public class PlayerJoinListener implements Listener {
             }
 
             Long lastOnline = resident.getLastOnline();*/
-        }
+                }
 
-        //check the queue for actions on this player
+                //check the queue for actions on this player
+            }
+        });
 
     }
 }

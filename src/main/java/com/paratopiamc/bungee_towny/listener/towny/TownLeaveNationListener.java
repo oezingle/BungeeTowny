@@ -2,6 +2,7 @@ package com.paratopiamc.bungee_towny.listener.towny;
 
 import com.palmergames.bukkit.towny.event.nation.NationTownLeaveEvent;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import com.paratopiamc.bungee_towny.sql.SQLMessage;
 import org.bukkit.Bukkit;
@@ -17,20 +18,25 @@ public class TownLeaveNationListener implements Listener {
     public void onTownLeaveNation(NationTownLeaveEvent event) {
         String town = event.getTown().getName();
 
-        //set nation with sql
-        new SQLMessage(SQLHost.getCredentials()).executeSQL(
-                " UPDATE players" +
-                        "    SET nation = 'nationless'" +
-                        "WHERE town ='" + town + "';"
-        );
-
         List<Resident> residents = event.getTown().getResidents();
 
-        for (Resident resident : residents) {
-            Player player = resident.getPlayer();
+        Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                //set nation with sql
+                new SQLMessage(SQLHost.getCredentials()).executeSQL(
+                        " UPDATE players" +
+                                "    SET nation = 'nationless'" +
+                                "WHERE town ='" + town + "';"
+                );
 
-            //TODO This is stupid
-            Bukkit.dispatchCommand(player, "chat general");
-        }
+                for (Resident resident : residents) {
+                    Player player = resident.getPlayer();
+
+                    //TODO This is stupid
+                    Bukkit.dispatchCommand(player, "chat general");
+                }
+            }
+        });
     }
 }
