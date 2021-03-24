@@ -44,4 +44,4 @@ Feel free to [submit an issue](https://github.com/oezingle/BungeeTowny/issues/ne
 # Dependencies
 - A MySQL server - Mariadb, Microsoft SQL, etc
 - BungeeCord / Velocity (With plugin messaging channel)
-- Towny on at least one server
+- Towny on at least one server. Optimally, it would be the server players first find themselves on
