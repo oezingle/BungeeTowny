@@ -36,6 +36,9 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 # Permissions
 See [plugin.yml](https://github.com/oezingle/BungeeTowny/blob/master/src/main/resources/plugin.yml)
 
+# Issues
+Feel free to [submit an issue]
+
 # Dependencies
 - A MySQL server - Mariadb, Microsoft SQL, etc
 - BungeeCord / Velocity (With plugin messaging channel)
