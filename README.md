@@ -37,7 +37,7 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 See [plugin.yml](https://github.com/oezingle/BungeeTowny/blob/master/src/main/resources/plugin.yml)
 
 # Issues
-Feel free to [submit an issue]
+Feel free to [submit an issue](https://github.com/oezingle/BungeeTowny/issues/new)
 
 # Dependencies
 - A MySQL server - Mariadb, Microsoft SQL, etc
