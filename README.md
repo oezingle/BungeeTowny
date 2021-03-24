@@ -3,12 +3,12 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 
 #This plugin is not complete!
 
-#Features
+# Features
 
-##Current
+## Current
 - Town Chat features
 - Placeholder API Features
 - JSON text formatting in Global, Town and Nation chats
 - Inter-player messaging across servers
 
-##Planned
+## Planned
