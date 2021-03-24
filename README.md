@@ -44,3 +44,4 @@ Feel free to [submit an issue](https://github.com/oezingle/BungeeTowny/issues/ne
 # Dependencies
 - A MySQL server - Mariadb, Microsoft SQL, etc
 - BungeeCord / Velocity (With plugin messaging channel)
+- Towny on at least one server
