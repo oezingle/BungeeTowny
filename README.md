@@ -7,14 +7,15 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 
 ## Current
 - Chat features (Optional)
-- TownyChat configuration compatibility
+  - TownyChat configuration compatibility
+  - Inter-player messaging across servers (Optional)
 - Multiple chat moderation features (Optional)
   - /mute & /unmute
   - /ignore & /unignore
   - /message & /msg (Optional)
 - Placeholder API Integration
 - JSON text formatting in Global, Town and Nation chats
-- Inter-player messaging across servers
+- Async database access, keeping the server TPS high
 
 ## Planned
 - Spigot chat API Integration
