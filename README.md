@@ -10,7 +10,7 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 - TownyChat configuration compatibility
 - Multiple chat moderation features (Optional)
    - /mute & /unmute
-   - /ignore
+   - /ignore & /unignore
    - /message & /msg (Optional)
 - Placeholder API Integration
 - JSON text formatting in Global, Town and Nation chats
