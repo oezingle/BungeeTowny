@@ -22,3 +22,9 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 - Towny synchronization
 - Event logging
 - Essentials Integration
+
+# Dependencies
+- MySQL
+- BungeeCord / Velocity (With plugin messaging channel)
+- Towny (Optional)
+- Placeholder API (Optional)
