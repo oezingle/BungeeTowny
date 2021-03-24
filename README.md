@@ -24,6 +24,11 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 - Essentials Integration
 - Town spawns and Outposts
 
+# Commands
+- /chat <channel> [msg] - use that channel for chat, or send a single message
+- /mute and /unmute - mute/unmute a given player for everyone
+- /ignore and /unignore - ignore what a given player is saying
+
 # Dependencies
 - A MySQL server - Mariadb, Microsoft SQL, etc
 - BungeeCord / Velocity (With plugin messaging channel)
