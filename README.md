@@ -25,10 +25,13 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 - Town spawns and Outposts
 
 # Commands
+## Chat
 - /chat <channel> [msg] - use that channel for chat, or send a single message
 - /mute and /unmute - mute/unmute a given player for everyone
 - /ignore and /unignore - ignore what a given player is saying
 - /message - aliased to /msg when the messaging submodule is enabled
+## Plugin
+ - /bungeetowny - status of the plugin and reloading options
 
 # Permissions
 See [plugin.yml](https://github.com/oezingle/BungeeTowny/blob/master/src/main/resources/plugin.yml)
