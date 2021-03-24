@@ -22,6 +22,7 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 - Towny synchronization
 - Event logging
 - Essentials Integration
+- Town spawns and Outposts
 
 # Dependencies
 - A MySQL server - Mariadb, Microsoft SQL, etc
