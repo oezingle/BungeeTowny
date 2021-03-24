@@ -7,8 +7,12 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 
 ## Current
 - Town Chat features
-- Placeholder API Features
+- Placeholder API Integration
 - JSON text formatting in Global, Town and Nation chats
 - Inter-player messaging across servers
 
 ## Planned
+- Spigot chat API Integration
+- Ally chats
+- Towny synchronization
+- Event logging
