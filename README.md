@@ -23,6 +23,7 @@ A plugin that hooks into Towny across multiple servers, syncronizing with a MySQ
 - Event logging
 - Essentials Integration
 - Town spawns and Outposts
+- Configuration synchronization
 
 # Commands
 ## Chat
