@@ -355,6 +355,10 @@ public final class BungeeTowny extends JavaPlugin {
         return thisPlugin;
     }
 
+    public static boolean isSpigot() {
+        return isSpigot;
+    }
+
     /*public static JavaPlugin getJavaPlugin() {
         return thisPlugin;
     }*/

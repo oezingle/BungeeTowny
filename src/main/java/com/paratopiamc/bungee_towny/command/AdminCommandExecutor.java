@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import javax.swing.*;
+
 public class AdminCommandExecutor implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
@@ -76,6 +78,12 @@ public class AdminCommandExecutor implements CommandExecutor {
                                 sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "PlaceholderAPI"));
                             } else {
                                 sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}", "PlaceholderAPI"));
+                            }
+
+                            if (BungeeTowny.isSpigot()) {
+                                sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "Spigot ChatComponent"));
+                            } else {
+                                sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}", "Spigot ChatComponent"));
                             }
 
                             if (Listeners.isUsingBungee()) {
