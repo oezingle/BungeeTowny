@@ -3,7 +3,6 @@ package com.paratopiamc.bungee_towny.chat.channel;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.command.chat.channel.ChatAliasExecutor;
 import com.paratopiamc.bungee_towny.command.chat.msg.MsgCommandAlias;
 import org.bukkit.Bukkit;
@@ -63,7 +62,7 @@ public class Channel {
             isJSON = false;
         }
 
-        BungeeTowny.getThisPlugin().getLogger().info("Registered chat channel: " + name);
+        //BungeeTowny.getThisPlugin().getLogger().info("Registered chat channel: " + name);
     }
 
     public String getFormat() {
@@ -134,6 +133,6 @@ public class Channel {
             return;
         }
 
-        BungeeTowny.getThisPlugin().getLogger().info("[BungeeTowny] Unregistered chat channel: " + name);
+        //BungeeTowny.getThisPlugin().getLogger().info("[BungeeTowny] Unregistered chat channel: " + name);
     }
 }

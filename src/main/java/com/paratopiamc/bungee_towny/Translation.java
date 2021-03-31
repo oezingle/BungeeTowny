@@ -49,6 +49,14 @@ public abstract class Translation {
         try {
             config = config.getConfigurationSection(lang);
 
+            addKeys(config, prefix);
+        } catch (Exception e) {
+            BungeeTowny.getThisPlugin().getLogger().info("The " + prefix + " message file does not have your language");
+        }
+    }
+
+    public static void addKeys(ConfigurationSection config, String prefix) {
+        try {
             if (prefix != "" && !prefix.endsWith(".")) {
                 prefix = prefix + ".";
             }

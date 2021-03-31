@@ -1,4 +1,4 @@
-package com.paratopiamc.bungee_towny.chat;
+package com.paratopiamc.bungee_towny.chat.channel;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.chat.channel.Channel;

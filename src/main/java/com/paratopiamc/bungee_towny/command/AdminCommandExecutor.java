@@ -2,7 +2,7 @@ package com.paratopiamc.bungee_towny.command;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.Translation;
-import com.paratopiamc.bungee_towny.chat.Channels;
+import com.paratopiamc.bungee_towny.chat.channel.Channels;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
 import org.bukkit.command.Command;

@@ -1,5 +1,6 @@
 package com.paratopiamc.bungee_towny.command.chat.channel;
 
+import com.paratopiamc.bungee_towny.BungeeTowny;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -26,13 +27,14 @@ public class ChatAliasExecutor extends BukkitCommand {
         }
 
         Bukkit.dispatchCommand(sender, "bungeetowny:chat " + channel + " " + argList);
-
+        
+        //this command literally cannot fail
         return true;
     }
 
+    //blank tab completes are good
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
         return new ArrayList<>();
-        //return super.tabComplete(sender, alias, args);
     }
 }

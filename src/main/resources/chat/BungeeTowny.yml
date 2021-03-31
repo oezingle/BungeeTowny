@@ -5,8 +5,7 @@ msg:
   enabled: true
   #players can /msg <name> to toggle into that 'channel'
   toggle: true
-  #0 is no timeout
-  #any other value is the timeout in minutes
+  #timeout in minutes. 0 is none
   timeout: 0
   #channel type and format, as seen in Channels.yml and ChatConfig.yml
   channel:
@@ -17,6 +16,64 @@ msg:
     permission: 'towny.chat.message'
     range: '-1'
   format: '{channelTag} {fromto} {permprefix}{playername}{permsuffix}&f:{msgcolour} {msg}'
+
+filter:
+  #warnings:
+  #  enabled: true
+  #  #at 3 warnings, the player will be automatically temp muted
+  #  count: 3
+
+  swear_filter:
+    enabled: true
+    #the list of channels for this filter to moderate
+    channels: [ALL]
+    #If false, messages from swearing players will be withheld
+    replace: true
+    #default | per_player
+    type: default
+    #how many warning 'points' this is worth
+    warning: 1
+
+  #disable unicode fonts often found in hacked clients
+  fancychat_filter:
+    enabled: true
+    #the list of channels for this filter to moderate
+    channels: [ALL]
+    notify_staff: true
+    #how many warning 'points' this is worth
+    warning: 1
+
+  caps_filter:
+    enabled: true
+    #the list of channels for this filter to moderate
+    channels: [ ALL ]
+    #what percentage of capital letters should be replaced?
+    percent: 60
+    #minimum letters in a message before caps filter. Fixes stuff like "LMAO" and "LOL"
+    min_letters: 10
+    #how many warning 'points' this is worth
+     warning: 1
+
+  #block messages that are repeated by players
+  repeat_filter:
+    enabled: true
+    #the list of channels for this filter to moderate
+    channels: [ ALL ]
+    #the amount of messages stored, per player
+    history: 100
+
+  #block links in chat
+  link_filter:
+    enabled: true
+    #the list of channels for this filter to moderate
+    channels: [ALL]
+    notify_staff: false
+    #list of websites that won't be blocked.
+    allowed:
+      - "discord.gg"
+      - "youtube.com"
+    #how many warning 'points' this is worth
+    warning: 1
 
 mute:
   enabled: true

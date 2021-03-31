@@ -210,9 +210,9 @@ public class ChatSendEvent extends Event {
                                 break;
                             case MESSAGE: {
 
-                                String[] messageInfo = players.getChannel(uuid).split(".");
-                                String sendTo = messageInfo[2];
-                                String returnChannel = messageInfo[3];
+                                String[] messageInfo = players.getChannel(uuid).split("@");
+                                String sendTo = messageInfo[1];
+                                String returnChannel = messageInfo[2];
 
                                 Player sendToPlayer = null;
                                 for (Player candidate : Bukkit.getOnlinePlayers()) {

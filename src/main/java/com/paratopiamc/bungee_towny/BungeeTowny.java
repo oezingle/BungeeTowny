@@ -2,8 +2,7 @@ package com.paratopiamc.bungee_towny;
 
 import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessage;
 import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessageListener;
-import com.paratopiamc.bungee_towny.chat.Channels;
-import com.paratopiamc.bungee_towny.chat.ChatFormats;
+import com.paratopiamc.bungee_towny.chat.channel.Channels;
 import com.paratopiamc.bungee_towny.command.AdminCommandExecutor;
 import com.paratopiamc.bungee_towny.command.AdminCommandTabCompletor;
 import com.paratopiamc.bungee_towny.command.chat.IgnoreCommandExecutor;
@@ -38,6 +37,8 @@ public final class BungeeTowny extends JavaPlugin {
     private static BukkitTask getPlayerList;
 
     private static JavaPlugin thisPlugin;
+
+    private static boolean isSpigot = false;
 
     @Override
     public void onEnable() {
@@ -99,6 +100,14 @@ public final class BungeeTowny extends JavaPlugin {
 
         getCommand("bungeetowny").setExecutor(new AdminCommandExecutor());
         getCommand("bungeetowny").setTabCompleter(new AdminCommandTabCompletor());
+
+        try {
+            if (Class.forName("org.spigotmc.SpigotConfig") != null) {
+                // has spigot
+                isSpigot = true;
+                getLogger().info("This server runs spigot!");
+            }
+        } catch (ClassNotFoundException e) {}
 
         getLogger().info("BungeeTown Enabled!");
     }
@@ -311,8 +320,8 @@ public final class BungeeTowny extends JavaPlugin {
             chatConfigFile = new File(thisPlugin.getDataFolder(), "chat/ChatConfig.yml");
             FileConfiguration chatConfig = YamlConfiguration.loadConfiguration(chatConfigFile);
 
-            Translation.setFromConfig(chatConfig.getConfigurationSection("colour"), "chat.towny.colors");
-            Translation.setFromConfig(chatConfig.getConfigurationSection("tag_formats"), "chat.towny.formats");
+            Translation.addKeys(chatConfig.getConfigurationSection("colour"), "chat.towny.colors");
+            Translation.addKeys(chatConfig.getConfigurationSection("tag_formats"), "chat.towny.formats");
             
             SQLHost.set_config("chatConfig", chatConfigFile);
 

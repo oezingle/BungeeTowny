@@ -45,6 +45,17 @@ public abstract class SQLHost {
         table_info.put("muted", "BOOLEAN DEFAULT FALSE");
         messenger.createTable("players", table_info);
 
+        //TODO tempmutes
+        /*
+        //add a table if it's using chat, to enable tempmuting
+        if (Listeners.isUsingChat()) {
+            table_info = new HashMap<>();
+            table_info.put("uuid", "VARCHAR(36) NOT NULL");
+            table_info.put("unmute_date", "DATETIME");
+            messenger.createTable("tempmutes", table_info);
+        }
+         */
+
         //town | nation | color | allies | claims
         table_info = new HashMap<>();
         table_info.put("town", "VARCHAR(36) NOT NULL");

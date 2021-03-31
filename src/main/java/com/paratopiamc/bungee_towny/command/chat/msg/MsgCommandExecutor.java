@@ -2,7 +2,7 @@ package com.paratopiamc.bungee_towny.command.chat.msg;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.Translation;
-import com.paratopiamc.bungee_towny.chat.Channels;
+import com.paratopiamc.bungee_towny.chat.channel.Channels;
 import com.paratopiamc.bungee_towny.chat.ChatSendEvent;
 import com.paratopiamc.bungee_towny.synced.Players;
 import org.bukkit.Bukkit;
@@ -62,7 +62,7 @@ public class MsgCommandExecutor implements CommandExecutor {
                     sender.sendMessage(Translation.of("chat.msg.convo_set_no_expire").replace("{playername}", playerName));
                 }
                 //switch the channel
-                new Players().setChannel("msg." + playerName + ".none", uuid);
+                new Players().setChannel("msg@" + playerName + "@none", uuid);
             } else {
                 sender.sendMessage(Translation.of("towny.command.not_found"));
                 return true;
@@ -84,16 +84,16 @@ public class MsgCommandExecutor implements CommandExecutor {
             Players players = new Players();
 
             String lastChannel = players.getChannel(uuid);
-            if (lastChannel.contains("msg.")) {
+            if (lastChannel.contains("msg@")) {
                 //grab this channel again
-                lastChannel = lastChannel.split(".")[3];
+                lastChannel = lastChannel.split("@")[3];
             }
 
             String playerName = args[0];
 
             //                             using msg
             //                                      recipient          channel to return to
-            players.setChannel("msg." + playerName + "." + lastChannel, uuid);
+            players.setChannel("msg@" + playerName + "@" + lastChannel, uuid);
             ChatSendEvent event = new ChatSendEvent(message, Channels.get("msg"), ((Player) sender).getPlayer(), !Bukkit.isPrimaryThread());
             Bukkit.getPluginManager().callEvent(event);
 
