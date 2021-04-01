@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /*
-This class basically just
+This class basically only has static methods for checking on filters and their configuration
  */
 public abstract class Filters {
 
