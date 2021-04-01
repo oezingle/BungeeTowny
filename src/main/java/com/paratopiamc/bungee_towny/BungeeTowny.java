@@ -2,6 +2,7 @@ package com.paratopiamc.bungee_towny;
 
 import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessage;
 import com.paratopiamc.bungee_towny.bungeemessage.BungeeMessageListener;
+import com.paratopiamc.bungee_towny.chat.Filters;
 import com.paratopiamc.bungee_towny.chat.channel.Channels;
 import com.paratopiamc.bungee_towny.command.AdminCommandExecutor;
 import com.paratopiamc.bungee_towny.command.AdminCommandTabCompletor;
@@ -107,10 +108,10 @@ public final class BungeeTowny extends JavaPlugin {
                 isSpigot = true;
                 getLogger().info("This server runs spigot!");
             } else {
-                getLogger().info("Could not find spigot. You will be missing some functionality");
+                getLogger().log(Level.WARNING,"Could not find spigot. You will be missing some functionality");
             }
         } catch (ClassNotFoundException e) {
-            getLogger().info("Could not find spigot. You will be missing some functionality");
+            getLogger().log(Level.WARNING, "Could not find spigot. You will be missing some functionality");
         }
 
         getLogger().info("BungeeTown Enabled!");
@@ -337,6 +338,9 @@ public final class BungeeTowny extends JavaPlugin {
 
             newChatSettingsFile = new File(thisPlugin.getDataFolder(), "chat/BungeeTowny.yml");
             FileConfiguration newChatConfig = YamlConfiguration.loadConfiguration(newChatSettingsFile);
+
+            //initialize new chat filters
+            Filters.init(newChatConfig.getConfigurationSection("filter"));
 
             SQLHost.set_config("newChatSettings", newChatSettingsFile);
 

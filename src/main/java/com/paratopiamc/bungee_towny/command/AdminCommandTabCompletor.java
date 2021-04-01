@@ -17,16 +17,21 @@ public class AdminCommandTabCompletor implements TabCompleter {
                     results.add("reload");
                 if (sender.hasPermission("bungeetowny.admin.status"))
                     results.add("status");
-            } else if (args.length == 2 && args[0].equalsIgnoreCase("reload")) {
-                if (sender.hasPermission("bungeetowny.admin.reload")) {
-                    results.add("chat");
-                    results.add("messages");
-                    results.add("sql");
-                    results.add("server");
+            } else if (args.length == 2) {
+                if (args[0].equalsIgnoreCase("reload")) {
+                    if (sender.hasPermission("bungeetowny.admin.reload")) {
+                        results.add("chat");
+                        results.add("messages");
+                        results.add("sql");
+                        results.add("server");
+                    }
+                } else if (args[0].equalsIgnoreCase("status")) {
+                    if (sender.hasPermission("bungeetowny.admin.status")) {
+                        results.add("chat");
+                    }
                 }
             }
         }
-
         return results;
     }
 }

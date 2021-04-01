@@ -3,6 +3,7 @@ package com.paratopiamc.bungee_towny.command;
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.Translation;
 import com.paratopiamc.bungee_towny.chat.ChatComponentWrapper;
+import com.paratopiamc.bungee_towny.chat.Filters;
 import com.paratopiamc.bungee_towny.chat.channel.Channels;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
@@ -61,67 +62,98 @@ public class AdminCommandExecutor implements CommandExecutor {
                                         sender.sendMessage(Translation.of("towny.command.admin.reload_success").replace("{module}", "server"));
                                         return true;
                                     default:
-                                        sender.sendMessage(Translation.of("towny.command.admin.unknown_arg"));
+                                        sender.sendMessage(Translation.of("towny.command.unknown_arg"));
                                         return false;
                                 }
                             } else {
-                                sender.sendMessage(Translation.of("towny.command.admin.unknown_arg"));
+                                sender.sendMessage(Translation.of("towny.command.unknown_arg"));
                                 break;
                             }
                         }
                     case "status":
                         if (sender.hasPermission("bungeetowny.admin.status")) {
-                            boolean workingAsNormal = true;
+                            if (args.length == 2) {
+                                switch (args[1]) {
+                                    case "chat":
+                                        Bukkit.getScheduler().runTaskAsynchronously(BungeeTowny.getThisPlugin(), () -> {
+                                            if (Listeners.isUsingChat()) {
+                                                sender.sendMessage(Translation.of("towny.command.admin.header").replace("{subcommand}", " status"));
 
-                            sender.sendMessage(Translation.of("towny.command.admin.header").replace("{subcommand}", " status"));
-                            if (Listeners.isUsingTowny()) {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "Towny"));
+                                                //Filters
+                                                sender.sendMessage(Translation.of("chat.admin.status.filter.header"));
+                                                for (String row : Filters.filtersEnabled()) {
+                                                    sender.sendMessage("  " + row);
+                                                }
+
+                                                //Channels
+                                                //sender.sendMessage(Translation.of("chat.admin.status.channel.header"));
+
+
+                                                sender.sendMessage(Translation.of("towny.command.admin.footer"));
+                                            } else {
+                                                sender.sendMessage(Translation.of("towny.command.admin.status.not_available"));
+                                            }
+                                        });
+
+                                        return true;
+                                }
                             } else {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}", "Towny"));
-                            }
+                                boolean workingAsNormal = true;
+                                sender.sendMessage(Translation.of("towny.command.admin.header").replace("{subcommand}", " status"));
+                                if (Listeners.isUsingTowny()) {
+                                    sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "Towny"));
+                                } else {
+                                    sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}", "Towny"));
+                                }
 
-                            if (Listeners.isUsingPAPI()) {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "PlaceholderAPI"));
-                            } else {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}", "PlaceholderAPI"));
-                            }
+                                //PAPI & Spigot are only used in chat
+                                if (Listeners.isUsingChat()) {
+                                    if (Listeners.isUsingPAPI()) {
+                                        sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "PlaceholderAPI"));
+                                    } else {
+                                        sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}", "PlaceholderAPI"));
+                                    }
 
-                            if (BungeeTowny.isSpigot()) {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "Spigot ChatComponent"));
-                            } else {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}", "Spigot ChatComponent"));
-                            }
+                                    if (BungeeTowny.isSpigot()) {
+                                        sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "Spigot ChatComponent"));
+                                    } else {
+                                        sender.sendMessage(Translation.of("towny.command.admin.status.not_using_plugin").replace("{plugin}", "Spigot ChatComponent"));
+                                    }
+                                }
 
-                            if (Listeners.isUsingBungee()) {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "Bungeecord"));
-                            } else {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.not_using_dependency").replace("{plugin}", "Bungeecord"));
-                                workingAsNormal = false;
-                            }
+                                if (Listeners.isUsingBungee()) {
+                                    sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "Bungeecord"));
+                                } else {
+                                    sender.sendMessage(Translation.of("towny.command.admin.status.not_using_dependency").replace("{plugin}", "Bungeecord"));
+                                    workingAsNormal = false;
+                                }
 
-                            if (SQLHost.getMessenger().isConnected()) {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "SQL"));
-                            } else {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.not_using_dependency").replace("{plugin}", "SQL"));
-                                workingAsNormal = false;
-                            }
+                                if (SQLHost.getMessenger().isConnected()) {
+                                    sender.sendMessage(Translation.of("towny.command.admin.status.using_plugin").replace("{plugin}", "SQL"));
+                                } else {
+                                    sender.sendMessage(Translation.of("towny.command.admin.status.not_using_dependency").replace("{plugin}", "SQL"));
+                                    workingAsNormal = false;
+                                }
 
-                            if (!workingAsNormal) {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.not_working"));
-                            }
+                                if (!workingAsNormal) {
+                                    sender.sendMessage(Translation.of("towny.command.admin.status.not_working"));
+                                }
 
-                            sender.sendMessage(Translation.of("towny.command.admin.footer"));
-                            if (Listeners.isUsingChat()) {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.module_enabled").replace("{module}", "Chat"));
-                            } else {
-                                sender.sendMessage(Translation.of("towny.command.admin.status.module_disabled").replace("{module}", "Chat"));
-                            }
-                            sender.sendMessage(Translation.of("towny.command.admin.footer"));
+                                sender.sendMessage(Translation.of("towny.command.admin.footer"));
+                                if (Listeners.isUsingChat()) {
+                                    sender.sendMessage(Translation.of("towny.command.admin.status.module_enabled").replace("{module}", "Chat"));
+                                } else {
+                                    sender.sendMessage(Translation.of("towny.command.admin.status.module_disabled").replace("{module}", "Chat"));
+                                }
+                                sender.sendMessage(Translation.of("towny.command.admin.footer"));
 
-                            return true;
+                                return true;
+                            }
+                        } else {
+                            return false;
                         }
                     default:
-                        sender.sendMessage(Translation.of("towny.command.admin.unknown_arg"));
+                        sender.sendMessage(Translation.of("towny.command.unknown_arg"));
                         return true;
                 }
             } else {

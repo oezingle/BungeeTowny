@@ -27,10 +27,10 @@ filter:
     enabled: true
     #the list of channels for this filter to moderate
     channels: [ALL]
-    #If false, messages from swearing players will be withheld
+    #If false, messages from swearing players will be withheld. If true, they're replaced with "*"
     replace: true
     #default | per_player
-    type: default
+    #type: default
     #how many warning 'points' this is worth
     warning: 1
 
@@ -39,7 +39,6 @@ filter:
     enabled: true
     #the list of channels for this filter to moderate
     channels: [ALL]
-    notify_staff: true
     #how many warning 'points' this is worth
     warning: 1
 
@@ -47,12 +46,12 @@ filter:
     enabled: true
     #the list of channels for this filter to moderate
     channels: [ ALL ]
-    #what percentage of capital letters should be replaced?
+    #at what percentage caps should the filter trigger?
     percent: 60
     #minimum letters in a message before caps filter. Fixes stuff like "LMAO" and "LOL"
     min_letters: 10
     #how many warning 'points' this is worth
-     warning: 1
+    warning: 1
 
   #block messages that are repeated by players
   repeat_filter:
@@ -61,13 +60,14 @@ filter:
     channels: [ ALL ]
     #the amount of messages stored, per player
     history: 100
+    #how many warning 'points' this is worth
+    warning: 0
 
   #block links in chat
   link_filter:
     enabled: true
     #the list of channels for this filter to moderate
     channels: [ALL]
-    notify_staff: false
     #list of websites that won't be blocked.
     allowed:
       - "discord.gg"

@@ -1,7 +1,6 @@
 package com.paratopiamc.bungee_towny.chat.channel;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
-import com.paratopiamc.bungee_towny.chat.channel.Channel;
 
 import com.paratopiamc.bungee_towny.command.chat.channel.ChatCommandExecutor;
 import com.paratopiamc.bungee_towny.command.chat.channel.ChatCommandTabCompletor;

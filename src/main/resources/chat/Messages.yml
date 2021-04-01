@@ -15,7 +15,17 @@ en:
     already_unmuted: "&eThat player is already not muted"
     mute_success: "&aMuted {playername}"
     unmute_success: "&aUnmuted {playername}"
-  #Depends on the msg.enabled Chat/BungeeTowny.yml
+    status:
+      filter:
+        header: "&6Filters"
+        swear_filter: "Swear,"
+        fancychat_filter: "Fancy Chat,"
+        caps_filter: "Caps,"
+        repeat_filter: "Repeat,"
+        link_filter: "Web link,"
+      channels:
+        header: "&6Channels"
+  #Depends on the msg.enabled in Chat/BungeeTowny.yml
   msg:
     convo_expired: "&fThe conversation you were in has expired"
     convo_set: "&fYou are now in a conversation with {playername}. It will expire in {time} minutes"
