@@ -106,8 +106,12 @@ public final class BungeeTowny extends JavaPlugin {
                 // has spigot
                 isSpigot = true;
                 getLogger().info("This server runs spigot!");
+            } else {
+                getLogger().info("Could not find spigot. You will be missing some functionality");
             }
-        } catch (ClassNotFoundException e) {}
+        } catch (ClassNotFoundException e) {
+            getLogger().info("Could not find spigot. You will be missing some functionality");
+        }
 
         getLogger().info("BungeeTown Enabled!");
     }

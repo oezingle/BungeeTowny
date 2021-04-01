@@ -2,13 +2,10 @@ package com.paratopiamc.bungee_towny.command;
 
 import com.paratopiamc.bungee_towny.BungeeTowny;
 import com.paratopiamc.bungee_towny.Translation;
+import com.paratopiamc.bungee_towny.chat.ChatComponentWrapper;
 import com.paratopiamc.bungee_towny.chat.channel.Channels;
 import com.paratopiamc.bungee_towny.listener.Listeners;
 import com.paratopiamc.bungee_towny.sql.SQLHost;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,22 +23,9 @@ public class AdminCommandExecutor implements CommandExecutor {
                     sender.sendMessage(Translation.of("towny.command.admin.footer"));
                 }
                 sender.sendMessage(replaceColors("&7BungeeTowny by &6Oezingle&7, written for the &6ParatopiaMC &7server"));
+
                 if (BungeeTowny.isSpigot()) {
-                    //chatComponent
-
-                    //bstats
-                    TextComponent text = new TextComponent(replaceColors("&7bstats: "));
-                    text.setUnderlined(true);
-                    text.addExtra(replaceColors("&7bstats.org/plugin/bukkit/BungeeTowny"));
-
-                    BaseComponent hover = new TextComponent("Visit this plugin's bstats page!");
-
-                    text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://bstats.org/plugin/bukkit/BungeeTowny/10724"));
-                    text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{hover}));
-
-                    sender.spigot().sendMessage(text);
-
-                    //spigot page?? idk
+                    new ChatComponentWrapper().admin(sender);
                 }
                 sender.sendMessage(Translation.of("towny.command.admin.footer"));
             });
